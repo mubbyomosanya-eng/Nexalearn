@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#090812" />
+<meta name="description" content="NexaLearn — your personal AI-powered learning companion. Learn. Understand. Master." />
+<meta name="application-name" content="NexaLearn" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="NexaLearn" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta property="og:title" content="NexaLearn — Learn. Understand. Master." />
+<meta property="og:description" content="Your personal AI-powered learning companion. Structured lessons, AI explanations, and interactive practice." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<title>NexaLearn — Learn. Understand. Master.</title>
+
+<link rel="icon" type="image/svg+xml" href="/icon.svg" />
+<link rel="apple-touch-icon" href="/icon.svg" />
+<link rel="manifest" href="/manifest.webmanifest" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- ============================================================
+     CSS: VARIABLES AND THEME
+     ============================================================ -->
+<style>
+:root{
+  --bg:#090812;
+  --bg2:#100E1D;
+  --card:#171426;
+  --elev:#201B34;
+  --primary:#7C4DFF;
+  --primary-2:#9B72FF;
+  --violet:#B69AFF;
+  --text:#F5F2FF;
+  --text-2:#A7A0BA;
+  --muted:#77718D;
+  --success:#35D69A;
+  --warning:#F5B94C;
+  --error:#FF647C;
+  --border:rgba(255,255,255,0.07);
+  --glow:rgba(124,77,255,0.18);
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius-card:18px;
+  --radius-btn:13px;
+  --radius-input:14px;
+  --tabbar-h:64px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+html[data-theme="light"]{
+  --bg:#F5F3FD;
+  --bg2:#FFFFFF;
+  --card:#FFFFFF;
+  --elev:#F0EBFF;
+  --text:#171130;
+  --text-2:#5D5573;
+  --muted:#8A83A0;
+  --border:rgba(20,10,50,0.09);
+  --glow:rgba(124,77,255,0.14);
+  --shadow:0 10px 26px rgba(40,20,90,.10);
+}
+
+/* ============================================================
+   CSS: GLOBAL STYLES
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-size:14px;
+  line-height:1.55;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s var(--ease), color .25s var(--ease);
+}
+h1,h2,h3,h4,p,ul,ol{margin:0}
+ul,ol{padding-left:18px}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;padding:0;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+svg{display:block}
+.hidden{display:none !important}
+.muted{color:var(--text-2)}
+.small{font-size:12px}
+svg.lucide{stroke-width:1.9}
+
+#app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--bg);
+  position:relative;
+  overflow-x:hidden;
+}
+
+.screen{display:none;padding-bottom:calc(var(--tabbar-h) + 40px + env(safe-area-inset-bottom))}
+.screen.active{display:block;animation:fadeUp .22s var(--ease)}
+.screen--flush{padding-bottom:0}
+.screen--flush.active{
+  display:flex;flex-direction:column;
+  height:100vh;
+  height:var(--app-vh, 100dvh);
+  animation:none;
+}
+body.no-tabbar .screen{padding-bottom:0}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{padding:6px 18px 24px}
+
+/* ============================================================
+   CSS: COMPONENT STYLES
+   ============================================================ */
+
+/* Brand */
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{width:32px;height:32px;flex:0 0 32px;display:block;border-radius:9px;overflow:hidden}
+.brand-mark svg{width:100%;height:100%}
+.brand-mark--xl{width:76px;height:76px;border-radius:22px;
+  box-shadow:0 0 0 1px rgba(124,77,255,.35),0 18px 50px rgba(124,77,255,.30)}
+.brand-name{font-weight:700;font-size:16px;letter-spacing:-.3px}
+
+/* Header */
+.app-header{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 18px;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+}
+.header-title{font-weight:600;font-size:15px}
+.header-spacer{width:34px;flex:0 0 34px}
+.avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(140deg,var(--primary),var(--primary-2));
+  color:#fff;font-weight:700;font-size:14px;
+  display:grid;place-items:center;flex:0 0 36px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.10), 0 6px 16px var(--glow);
+  transition:transform .16s var(--ease);
+}
+.avatar:active{transform:scale(.94)}
+.icon-btn{
+  width:40px;height:40px;border-radius:11px;
+  display:grid;place-items:center;
+  border:1px solid var(--border);
+  background:var(--card);color:var(--text-2);
+  transition:background .16s var(--ease),transform .16s var(--ease),color .16s var(--ease);
+}
+.icon-btn:active{transform:scale(.93);background:var(--elev)}
+.icon-btn--sm{width:32px;height:32px;border-radius:9px}
+.icon-btn svg{width:17px;height:17px}
+
+/* Typography helpers */
+.greeting{font-size:25px;font-weight:800;letter-spacing:-.7px;line-height:1.25}
+.greeting-sub{margin-top:4px;font-size:13.5px}
+.screen-heading{font-size:25px;font-weight:800;letter-spacing:-.7px;margin-bottom:4px}
+.section-title{font-size:17px;font-weight:700;letter-spacing:-.3px;margin:26px 0 12px}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;min-height:48px;padding:14px 18px;border-radius:var(--radius-btn);
+  font-weight:600;font-size:14.5px;letter-spacing:-.1px;
+  border:1px solid transparent;
+  transition:transform .16s var(--ease),background .18s var(--ease),opacity .18s var(--ease),box-shadow .18s var(--ease);
+}
+.btn svg{width:17px;height:17px}
+.btn:active{transform:scale(.975)}
+.btn--primary{background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;box-shadow:0 8px 22px var(--glow)}
+.btn--ghost{background:transparent;color:var(--text-2);border-color:var(--border)}
+.btn--ghost:active{background:var(--card)}
+.btn--soft{background:var(--elev);color:var(--text);border-color:var(--border)}
+.btn--danger{background:rgba(255,100,124,.10);color:var(--error);border-color:rgba(255,100,124,.30)}
+.btn--sm{padding:10px 14px;font-size:13px;border-radius:11px;width:auto;min-height:40px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+
+/* Pills */
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 11px;border-radius:999px;
+  font-size:10.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;
+}
+.pill--soft{background:rgba(124,77,255,.16);color:var(--violet)}
+.pill--success{background:rgba(53,214,154,.14);color:var(--success)}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:16px}
+
+/* ============================================================
+   CSS: FORM CONTROLS
+   ============================================================ */
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--text-2);margin:14px 0 6px}
+.form-label:first-of-type{margin-top:0}
+.form-input,.form-select{
+  width:100%;padding:12px 14px;background:var(--card);
+  border:1px solid var(--border);border-radius:12px;
+  font-size:14px;color:var(--text);outline:none;
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease);
+}
+.form-input:focus,.form-select:focus{border-color:rgba(124,77,255,.45);box-shadow:0 0 0 3px var(--glow)}
+.form-input::placeholder{color:var(--muted)}
+.form-select{appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2377718D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:36px;
+}
+.form-help{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+.form-help code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;
+  font-family:'SF Mono',Monaco,Consolas,monospace;font-size:11px}
+.form-help a{color:var(--primary-2);text-decoration:none}
+.form-help a:hover{text-decoration:underline}
+html[data-theme="light"] .form-help code{background:rgba(20,10,50,.07)}
+
+/* ============================================================
+   CSS: WELCOME SCREEN
+   ============================================================ */
+#screen-welcome{min-height:100vh;display:none;position:relative;overflow:hidden}
+#screen-welcome.active{display:flex;align-items:center;justify-content:center;padding-bottom:0}
+.welcome-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(58% 42% at 50% 6%, rgba(124,77,255,.30), transparent 70%),
+    radial-gradient(50% 40% at 90% 96%, rgba(155,114,255,.16), transparent 72%),
+    radial-gradient(45% 35% at 4% 84%, rgba(124,77,255,.13), transparent 75%);
+}
+.welcome-inner{
+  position:relative;z-index:1;width:100%;max-width:420px;
+  padding:38px 26px 34px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
+.welcome-title{font-size:31px;font-weight:800;letter-spacing:-1.1px;margin-top:18px}
+.welcome-tagline{margin-top:9px;font-size:10.5px;font-weight:700;letter-spacing:2.6px;color:var(--violet)}
+.welcome-sub{margin-top:16px;font-size:14.5px;color:var(--text-2);font-weight:500}
+.welcome-intro{margin-top:10px;font-size:13px;color:var(--muted);max-width:330px;line-height:1.65}
+.welcome-actions{width:100%;margin-top:30px;display:flex;flex-direction:column;gap:10px}
+.welcome-foot{margin-top:26px;font-size:10.5px;color:var(--muted);letter-spacing:.2px}
+
+/* ============================================================
+   CSS: HOME DASHBOARD
+   ============================================================ */
+#continue-card{margin-top:20px}
+.continue{
+  position:relative;overflow:hidden;
+  background:linear-gradient(150deg, rgba(124,77,255,.20), rgba(124,77,255,.05) 60%), var(--card);
+  border:1px solid rgba(124,77,255,.22);
+  border-radius:20px;padding:18px;
+  box-shadow:0 12px 34px rgba(124,77,255,.10);
+}
+.continue::after{
+  content:"";position:absolute;width:170px;height:170px;right:-70px;top:-80px;
+  background:radial-gradient(circle, rgba(124,77,255,.30), transparent 70%);
+  pointer-events:none;
+}
+.continue__label{font-size:10px;font-weight:800;letter-spacing:1.6px;color:var(--violet);text-transform:uppercase}
+.continue__code{margin-top:10px;font-size:19px;font-weight:800;letter-spacing:-.4px}
+.continue__title{font-size:13.5px;color:var(--text-2);font-weight:600;margin-top:1px}
+.continue__topic{font-size:12px;color:var(--muted);margin-top:6px}
+.continue__bar{margin-top:14px}
+.continue__meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:7px}
+.continue .btn{margin-top:14px}
+
+.bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+html[data-theme="light"] .bar{background:rgba(20,10,50,.08)}
+.bar__fill{height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-2));
+  width:0;transition:width .55s var(--ease)}
+
+.course-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.course-card{
+  display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:14px;text-align:left;
+  transition:transform .16s var(--ease),border-color .18s var(--ease),background .18s var(--ease);
+}
+.course-card:active{transform:scale(.975);border-color:rgba(124,77,255,.35)}
+.course-icon{
+  width:36px;height:36px;border-radius:11px;flex:0 0 36px;
+  display:grid;place-items:center;
+  background:color-mix(in srgb, var(--ic) 18%, transparent);
+  color:var(--ic);
+  border:1px solid color-mix(in srgb, var(--ic) 26%, transparent);
+}
+.course-icon svg{width:18px;height:18px}
+.course-card__code{font-size:11px;font-weight:700;color:var(--text-2);letter-spacing:.4px}
+.course-card__title{font-size:13.5px;font-weight:600;line-height:1.35;margin-top:2px}
+
+.ai-card{position:relative;overflow:hidden;margin-top:26px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:18px}
+.ai-card__glow{position:absolute;width:200px;height:200px;right:-90px;bottom:-110px;
+  background:radial-gradient(circle, rgba(124,77,255,.30), transparent 70%);pointer-events:none}
+.ai-card__top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ai-card__icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--primary),var(--primary-2));
+  color:#fff;box-shadow:0 8px 20px var(--glow)}
+.ai-card__icon svg{width:19px;height:19px}
+.ai-card__title{font-size:18px;font-weight:700;letter-spacing:-.4px;margin-top:14px}
+.ai-card__text{font-size:13px;color:var(--text-2);margin-top:6px;max-width:290px}
+.ai-card .btn{margin-top:16px}
+
+/* ============================================================
+   CSS: LEARN / SEARCH / COURSE LIST
+   ============================================================ */
+.search{display:flex;align-items:center;gap:10px;margin-top:16px;padding:0 14px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-input);
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.search:focus-within{border-color:rgba(124,77,255,.45);box-shadow:0 0 0 3px var(--glow)}
+.search svg{width:17px;height:17px;color:var(--muted);flex:0 0 17px}
+.search input{flex:1;min-width:0;background:transparent;border:none;outline:none;
+  padding:14px 0;font-size:14px;color:var(--text)}
+.search input::placeholder{color:var(--muted)}
+input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
+
+.course-list{margin-top:16px;display:flex;flex-direction:column;gap:11px}
+.course-row{display:flex;align-items:center;gap:13px;
+  background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;
+  text-align:left;width:100%;
+  transition:transform .16s var(--ease),border-color .18s var(--ease)}
+.course-row:active{transform:scale(.985);border-color:rgba(124,77,255,.35)}
+.course-row__body{flex:1;min-width:0}
+.course-row__code{font-size:11px;font-weight:700;color:var(--violet);letter-spacing:.5px}
+.course-row__title{font-size:14.5px;font-weight:600;margin-top:2px}
+.course-row__meta{font-size:11.5px;color:var(--muted);margin-top:3px}
+.course-row > svg{width:17px;height:17px;color:var(--muted);flex:0 0 17px}
+
+.empty-state{display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:8px;padding:48px 20px;color:var(--text-2)}
+.empty-state svg{width:32px;height:32px;color:var(--muted);margin-bottom:4px}
+.empty-state p{font-size:14px;font-weight:600;color:var(--text)}
+.empty-state span{font-size:12px;color:var(--muted)}
+
+/* Course detail */
+.course-hero{position:relative;overflow:hidden;
+  background:linear-gradient(150deg, rgba(124,77,255,.18), transparent 65%), var(--card);
+  border:1px solid rgba(124,77,255,.20);border-radius:20px;padding:18px;margin-top:8px}
+.course-hero__top{display:flex;align-items:center;gap:12px}
+.course-hero h1{font-size:21px;font-weight:800;letter-spacing:-.6px;margin-top:14px}
+.course-hero p{font-size:13px;color:var(--text-2);margin-top:5px}
+.course-hero__bar{margin-top:16px}
+
+.topic-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.topic-row{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--border);border-radius:15px;padding:14px;
+  transition:transform .16s var(--ease),border-color .18s var(--ease),background .18s var(--ease)}
+.topic-row:active{transform:scale(.985);border-color:rgba(124,77,255,.35)}
+.topic-row__num{width:30px;height:30px;flex:0 0 30px;border-radius:10px;
+  display:grid;place-items:center;background:var(--elev);color:var(--text-2);
+  font-size:12px;font-weight:700}
+.topic-row.is-done .topic-row__num{background:rgba(53,214,154,.15);color:var(--success)}
+.topic-row__body{flex:1;min-width:0}
+.topic-row__title{font-size:14px;font-weight:600}
+.topic-row__desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+.topic-row__right{display:flex;align-items:center;gap:6px;flex:0 0 auto;color:var(--muted)}
+.topic-row__right svg{width:16px;height:16px}
+
+/* ============================================================
+   CSS: LESSON SCREEN
+   ============================================================ */
+.lesson-head{margin-top:8px}
+.lesson-chip{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lesson-chip .pill{background:rgba(124,77,255,.15);color:var(--violet);
+  text-transform:none;letter-spacing:.2px;font-size:11px}
+.lesson-title{font-size:23px;font-weight:800;letter-spacing:-.7px;line-height:1.28;margin-top:12px}
+.lesson-sub{font-size:12.5px;color:var(--muted);margin-top:5px}
+
+.lesson-section{margin-top:18px}
+.lesson-section h3{font-size:15.5px;font-weight:700;letter-spacing:-.2px;
+  display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.lesson-section h3 svg{width:16px;height:16px;color:var(--primary-2)}
+.lesson-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.lesson-card p{font-size:13.5px;color:var(--text-2);line-height:1.7}
+.lesson-card p + p{margin-top:11px}
+.lesson-card strong{color:var(--text);font-weight:600}
+
+.obj-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+.obj-list li{display:flex;gap:10px;font-size:13px;color:var(--text-2);line-height:1.6}
+.obj-list li::before{content:"";flex:0 0 6px;width:6px;height:6px;border-radius:50%;
+  background:var(--primary-2);margin-top:7px}
+
+.concept{padding:12px 0;border-bottom:1px solid var(--border)}
+.concept:last-child{border-bottom:none;padding-bottom:0}
+.concept:first-child{padding-top:0}
+.concept dt{font-size:13.5px;font-weight:700;color:var(--text)}
+.concept dd{margin:4px 0 0;font-size:12.5px;color:var(--text-2);line-height:1.6}
+
+.example{display:flex;gap:10px;padding:12px;border-radius:13px;
+  background:var(--bg2);border:1px solid var(--border);
+  font-size:12.5px;color:var(--text-2);line-height:1.6}
+.example + .example{margin-top:9px}
+.example svg{width:15px;height:15px;color:var(--warning);flex:0 0 15px;margin-top:2px}
+
+.lesson-actions{display:flex;flex-direction:column;gap:10px;
+  margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
+.lesson-actions .row{display:flex;gap:10px}
+.lesson-actions .row .btn{flex:1}
+.link-btn{align-self:center;font-size:12.5px;font-weight:600;color:var(--muted);
+  padding:12px;display:inline-flex;align-items:center;gap:6px;min-height:44px}
+.link-btn svg{width:14px;height:14px}
+.link-btn:active{color:var(--primary-2)}
+
+/* ============================================================
+   CSS: AI CLASSROOM
+   ============================================================ */
+#screen-classroom{background:var(--bg)}
+.class-header{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+  flex:0 0 auto;
+}
+.class-header__meta{flex:1;min-width:0}
+.class-header__meta h2{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.class-header__meta p{font-size:11.5px;color:var(--muted);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ai-status{
+  display:flex;align-items:center;gap:6px;
+  font-size:10.5px;font-weight:700;
+  padding:5px 10px;border-radius:999px;flex:0 0 auto;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.ai-status__dot{width:6px;height:6px;border-radius:50%;animation:pulse 2.2s infinite}
+.ai-status--live{color:var(--success);background:rgba(53,214,154,.12)}
+.ai-status--live .ai-status__dot{background:var(--success)}
+.ai-status--simulated{color:var(--warning);background:rgba(245,185,76,.12)}
+.ai-status--simulated .ai-status__dot{background:var(--warning)}
+.ai-status--error{color:var(--error);background:rgba(255,100,124,.14)}
+.ai-status--error .ai-status__dot{background:var(--error)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+.chat{
+  flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;
+  padding:18px 16px 10px;
+  display:flex;flex-direction:column;gap:16px;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+.msg{display:flex;gap:9px;max-width:100%;animation:msgIn .26s var(--ease)}
+@keyframes msgIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.msg--ai{align-self:flex-start}
+.msg--user{align-self:flex-end;justify-content:flex-end}
+.msg__avatar{
+  width:28px;height:28px;flex:0 0 28px;border-radius:9px;
+  display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--primary),var(--primary-2));
+  color:#fff;margin-top:2px;
+}
+.msg__avatar svg{width:15px;height:15px}
+.msg__bubble{
+  max-width:calc(100% - 40px);
+  padding:12px 14px;border-radius:15px;
+  font-size:13.5px;line-height:1.68;
+  border:1px solid var(--border);
+  background:var(--elev);
+  overflow-wrap:anywhere;
+}
+.msg--ai .msg__bubble{border-top-left-radius:5px}
+.msg--user .msg__bubble{
+  background:linear-gradient(140deg,var(--primary),var(--primary-2));
+  border-color:transparent;color:#fff;
+  border-top-right-radius:5px;
+  box-shadow:0 8px 22px rgba(124,77,255,.22);
+}
+.msg__bubble p{margin:0}
+.msg__bubble p + p{margin-top:9px}
+.msg__bubble h4{font-size:13.5px;font-weight:700;color:var(--text);margin:14px 0 6px;letter-spacing:-.1px}
+.msg__bubble h4:first-child{margin-top:0}
+.msg__bubble ul,.msg__bubble ol{margin:6px 0 0;padding-left:17px}
+.msg__bubble li{margin-top:4px}
+.msg__bubble strong{color:var(--text);font-weight:700}
+.msg__bubble em{font-style:italic;opacity:.92}
+.msg__bubble code{background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;
+  font-family:'SF Mono',Monaco,Consolas,monospace;font-size:12px}
+.msg__bubble pre{background:rgba(0,0,0,.30);border:1px solid var(--border);border-radius:10px;
+  padding:10px 12px;margin:8px 0;overflow-x:auto;font-size:12px;line-height:1.5}
+.msg__bubble pre code{background:none;padding:0;font-size:12px}
+html[data-theme="light"] .msg__bubble pre{background:rgba(20,10,50,.06)}
+.msg--user .msg__bubble strong{color:#fff}
+.msg--user .msg__bubble code{background:rgba(0,0,0,.18);color:#fff}
+.msg--user .msg__bubble pre{background:rgba(0,0,0,.20)}
+.msg__bubble.is-error{border-color:rgba(255,100,124,.35);background:rgba(255,100,124,.08)}
+.msg__bubble.is-error strong{color:var(--error)}
+
+.typing{display:flex;gap:5px;padding:4px 2px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--primary-2);
+  animation:bounce 1.25s infinite ease-in-out}
+.typing span:nth-child(2){animation-delay:.16s}
+.typing span:nth-child(3){animation-delay:.32s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.45}30%{transform:translateY(-5px);opacity:1}}
+
+.chat-suggestions,.teach-controls{display:flex;gap:8px;overflow-x:auto;padding:0 16px 10px;
+  scrollbar-width:none;flex:0 0 auto;transition:opacity .18s var(--ease)}
+.chat-suggestions::-webkit-scrollbar,.teach-controls::-webkit-scrollbar{display:none}
+body.chat-focus .chat-suggestions,
+body.chat-focus .teach-controls{display:none}
+.chip{flex:0 0 auto;white-space:nowrap;padding:10px 15px;border-radius:999px;
+  font-size:12px;font-weight:600;min-height:38px;display:inline-flex;align-items:center;
+  background:var(--card);border:1px solid var(--border);color:var(--text-2);
+  transition:transform .15s var(--ease),background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease)}
+.chip:active{transform:scale(.95)}
+.chip--accent{background:rgba(124,77,255,.13);border-color:rgba(124,77,255,.26);color:var(--violet)}
+
+.composer{flex:0 0 auto;display:flex;align-items:flex-end;gap:9px;
+  padding:10px 16px;padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--border);background:var(--bg2)}
+.composer textarea{flex:1;min-width:0;resize:none;max-height:120px;overflow-y:auto;
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:12px 16px;font-size:14px;line-height:1.5;color:var(--text);outline:none;
+  transition:border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.composer textarea::placeholder{color:var(--muted)}
+.composer textarea:focus{border-color:rgba(124,77,255,.45);box-shadow:0 0 0 3px var(--glow)}
+.send-btn{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));color:#fff;
+  box-shadow:0 8px 20px var(--glow);
+  transition:transform .16s var(--ease),opacity .18s var(--ease)}
+.send-btn:active{transform:scale(.92)}
+.send-btn svg{width:18px;height:18px}
+
+/* ============================================================
+   CSS: PRACTICE
+   ============================================================ */
+.practice-group{margin-top:18px}
+.practice-group__head{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.practice-group__head strong{font-size:13.5px;display:block;line-height:1.3}
+.practice-group__head .muted{display:block;font-size:11.5px}
+.practice-topic{display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:14px;border-radius:14px;min-height:52px;
+  background:var(--card);border:1px solid var(--border);font-size:13.5px;font-weight:500;
+  transition:transform .15s var(--ease),border-color .18s var(--ease)}
+.practice-topic + .practice-topic{margin-top:8px}
+.practice-topic:active{transform:scale(.985);border-color:rgba(124,77,255,.35)}
+.practice-topic span:first-child{flex:1;min-width:0}
+.practice-topic svg{width:15px;height:15px;color:var(--muted);flex:0 0 15px}
+
+.quiz-head{display:flex;align-items:center;gap:10px;margin-top:8px}
+.quiz-head h1{font-size:17px;font-weight:800;letter-spacing:-.5px;flex:1;min-width:0}
+.quiz-count{font-size:11.5px;font-weight:700;color:var(--violet);letter-spacing:.4px;flex:0 0 auto}
+.quiz-progress{margin-top:12px}
+.quiz-topic{font-size:12px;color:var(--muted);margin-top:9px}
+
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:18px;margin-top:16px}
+.question-card h2{font-size:16px;font-weight:700;line-height:1.5;letter-spacing:-.2px}
+
+.options{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+.option{display:flex;align-items:center;gap:11px;padding:14px;border-radius:13px;
+  text-align:left;width:100%;min-height:52px;background:var(--bg2);
+  border:1px solid var(--border);font-size:13.5px;line-height:1.45;color:var(--text);
+  transition:transform .15s var(--ease),border-color .18s var(--ease),background .18s var(--ease)}
+.option:active{transform:scale(.987)}
+.option__key{width:26px;height:26px;flex:0 0 26px;border-radius:8px;
+  display:grid;place-items:center;background:var(--elev);color:var(--text-2);
+  font-size:12px;font-weight:700;
+  transition:background .18s var(--ease),color .18s var(--ease)}
+.option.is-selected{border-color:rgba(124,77,255,.55);background:rgba(124,77,255,.12)}
+.option.is-selected .option__key{background:var(--primary);color:#fff}
+.option.is-correct{border-color:rgba(53,214,154,.55);background:rgba(53,214,154,.11)}
+.option.is-correct .option__key{background:var(--success);color:#04241a}
+.option.is-wrong{border-color:rgba(255,100,124,.55);background:rgba(255,100,124,.10)}
+.option.is-wrong .option__key{background:var(--error);color:#2a0410}
+.option[disabled]{cursor:default}
+
+.feedback{margin-top:14px;padding:13px 14px;border-radius:13px;
+  font-size:12.5px;line-height:1.65;border:1px solid var(--border);background:var(--bg2);
+  animation:fadeUp .22s var(--ease)}
+.feedback strong{display:block;font-size:13px;margin-bottom:4px}
+.feedback.is-correct{border-color:rgba(53,214,154,.35);background:rgba(53,214,154,.08)}
+.feedback.is-correct strong{color:var(--success)}
+.feedback.is-wrong{border-color:rgba(255,100,124,.35);background:rgba(255,100,124,.08)}
+.feedback.is-wrong strong{color:var(--error)}
+
+.quiz-actions{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+
+.result-card{margin-top:16px;text-align:center;
+  background:linear-gradient(160deg, rgba(124,77,255,.16), transparent 60%), var(--card);
+  border:1px solid rgba(124,77,255,.22);border-radius:20px;padding:26px 18px}
+.result-ring{width:110px;height:110px;margin:0 auto;border-radius:50%;
+  display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--primary) 0deg, var(--primary-2) var(--deg,0deg), rgba(255,255,255,.07) var(--deg,0deg))}
+.result-ring::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--card)}
+.result-ring__value{position:relative;z-index:1;font-size:25px;font-weight:800;letter-spacing:-1px}
+.result-title{font-size:19px;font-weight:800;letter-spacing:-.5px;margin-top:18px}
+.result-sub{font-size:13px;color:var(--text-2);margin-top:5px}
+.result-stats{display:flex;gap:10px;margin-top:18px}
+.result-stat{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:12px 8px}
+.result-stat__value{font-size:18px;font-weight:800;letter-spacing:-.5px}
+.result-stat__label{font-size:10.5px;color:var(--muted);margin-top:2px}
+.result-stat--ok .result-stat__value{color:var(--success)}
+.result-stat--bad .result-stat__value{color:var(--error)}
+
+/* ============================================================
+   CSS: PROFILE
+   ============================================================ */
+.profile-head{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:24px 0 6px}
+.profile-avatar{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;
+  font-size:28px;font-weight:800;color:#fff;
+  background:linear-gradient(140deg,var(--primary),var(--primary-2));
+  box-shadow:0 0 0 4px var(--bg), 0 0 0 5px rgba(124,77,255,.35), 0 16px 40px var(--glow);
+  position:relative;transition:transform .16s var(--ease)}
+.profile-avatar:active{transform:scale(.96)}
+.profile-avatar::after{content:"";position:absolute;bottom:0;right:0;width:22px;height:22px;border-radius:50%;
+  background:var(--card);border:2px solid var(--bg);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237C4DFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'/%3E%3C/svg%3E");
+  background-size:11px 11px;background-position:center;background-repeat:no-repeat}
+.profile-name{font-size:20px;font-weight:800;letter-spacing:-.5px;margin-top:16px}
+.profile-head .pill{margin-top:10px}
+
+.stats{display:flex;gap:10px;margin-top:22px}
+.stat{flex:1;text-align:center;padding:15px 8px;
+  background:var(--card);border:1px solid var(--border);border-radius:16px}
+.stat__value{display:block;font-size:20px;font-weight:800;letter-spacing:-.6px;color:var(--violet)}
+.stat__label{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.35}
+
+.settings-card{padding:4px 16px}
+.setting-row{display:flex;align-items:center;gap:12px;padding:14px 0;
+  border-bottom:1px solid var(--border);width:100%;text-align:left}
+.setting-row:last-child{border-bottom:none}
+button.setting-row{transition:transform .15s var(--ease),background .18s var(--ease)}
+button.setting-row:active{transform:scale(.99);background:var(--elev)}
+.setting-row__icon{width:34px;height:34px;flex:0 0 34px;border-radius:11px;display:grid;place-items:center;
+  background:var(--elev);color:var(--primary-2)}
+.setting-row__icon svg{width:16px;height:16px}
+.setting-row__text{flex:1;min-width:0}
+.setting-row__text span:first-child{display:block;font-size:13.5px;font-weight:600}
+.setting-row__text .small{display:block;margin-top:1px}
+.setting-row .chev{color:var(--muted);flex:0 0 auto}
+.setting-row .chev svg{width:16px;height:16px}
+
+.switch{width:44px;height:26px;flex:0 0 44px;border-radius:999px;
+  background:rgba(255,255,255,.10);border:1px solid var(--border);position:relative;
+  transition:background .2s var(--ease)}
+html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
+.switch span{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+  background:var(--muted);transition:transform .2s var(--ease),background .2s var(--ease)}
+.switch.is-on{background:rgba(124,77,255,.35);border-color:rgba(124,77,255,.5)}
+.switch.is-on span{transform:translateX(18px);background:linear-gradient(135deg,var(--primary),var(--primary-2))}
+.switch[aria-disabled="true"]{opacity:.55}
+.profile-foot{text-align:center;font-size:11px;color:var(--muted);margin-top:26px;letter-spacing:.3px}
+
+/* ============================================================
+   CSS: SETTINGS SCREEN
+   ============================================================ */
+.settings-section{margin-top:20px}
+.settings-section:first-child{margin-top:6px}
+.settings-section h2{font-size:13px;font-weight:700;letter-spacing:.8px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.settings-block{background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px}
+.settings-block .form-label:first-of-type{margin-top:0}
+.settings-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.settings-actions .btn{width:auto;flex:1;min-width:0;min-height:44px;padding:11px 16px;font-size:13.5px}
+
+/* ============================================================
+   CSS: TABBAR
+   ============================================================ */
+.tabbar{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;z-index:60;
+  display:flex;align-items:stretch;
+  background:color-mix(in srgb, var(--bg2) 94%, transparent);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-top:1px solid var(--border);
+  padding-bottom:env(safe-area-inset-bottom);
+  transition:transform .2s var(--ease),opacity .2s var(--ease);
+}
+.tabbar.is-hidden{transform:translateX(-50%) translateY(110%);opacity:0;pointer-events:none}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  padding:9px 4px 8px;min-height:var(--tabbar-h);
+  color:var(--muted);font-size:10.5px;font-weight:600;letter-spacing:.1px;
+  position:relative;
+  transition:color .18s var(--ease),transform .15s var(--ease);
+}
+.tab svg{width:20px;height:20px;transition:transform .18s var(--ease)}
+.tab:active{transform:scale(.94)}
+.tab.is-active{color:var(--primary-2)}
+.tab.is-active svg{transform:translateY(-1px)}
+.tab.is-active::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:22px;height:2.5px;border-radius:0 0 3px 3px;
+  background:linear-gradient(90deg,var(--primary),var(--primary-2));
+}
+
+/* ============================================================
+   CSS: MODAL + TOAST
+   ============================================================ */
+.modal{position:fixed;inset:0;z-index:120;display:none;align-items:flex-end;justify-content:center}
+.modal.is-open{display:flex}
+.modal__backdrop{position:absolute;inset:0;background:rgba(3,2,10,.66);
+  backdrop-filter:blur(3px);animation:fadeIn .2s var(--ease)}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal__sheet{
+  position:relative;width:100%;max-width:480px;
+  background:var(--bg2);
+  border:1px solid var(--border);border-bottom:none;
+  border-radius:22px 22px 0 0;
+  padding:18px 18px calc(22px + env(safe-area-inset-bottom));
+  animation:sheetUp .26s var(--ease);
+  max-height:85vh;overflow-y:auto;
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+.modal__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.modal__head h3{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.modal__body{font-size:13px;color:var(--text-2);line-height:1.7}
+.modal__body p + p{margin-top:11px}
+.modal__body strong{color:var(--text)}
+.modal__body a{color:var(--primary-2)}
+.modal__body ul{padding-left:18px;margin-top:6px}
+.modal__body li{margin-top:4px}
+
+.toast{
+  position:fixed;left:50%;bottom:calc(var(--tabbar-h) + 26px + env(safe-area-inset-bottom));
+  transform:translate(-50%,14px);
+  z-index:200;
+  max-width:calc(100% - 40px);
+  padding:12px 16px;border-radius:12px;
+  background:var(--elev);border:1px solid var(--border);
+  color:var(--text);font-size:12.5px;font-weight:600;
+  box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;text-align:center;
+  transition:opacity .22s var(--ease),transform .22s var(--ease);
+}
+.toast.is-visible{opacity:1;transform:translate(-50%,0)}
+.toast.is-error{border-color:rgba(255,100,124,.4);color:var(--error)}
+.toast.is-success{border-color:rgba(53,214,154,.4);color:var(--success)}
+
+/* ============================================================
+   CSS: RESPONSIVE DESIGN
+   ============================================================ */
+@media (max-width:359px){
+  .page{padding-left:14px;padding-right:14px}
+  .app-header{padding-left:14px;padding-right:14px}
+  .greeting,.screen-heading{font-size:22px}
+  .welcome-title{font-size:27px}
+  .welcome-inner{padding-left:20px;padding-right:20px}
+  .course-grid{gap:9px}
+  .course-card{padding:12px}
+  .stat__value{font-size:18px}
+  .chat{padding-left:13px;padding-right:13px}
+  .chat-suggestions,.teach-controls{padding-left:13px;padding-right:13px}
+  .composer{padding-left:13px;padding-right:13px}
+  .lesson-title{font-size:20px}
+  .chat-suggestions .chip, .teach-controls .chip{padding:9px 12px;font-size:11.5px}
+  .settings-actions .btn{font-size:12.5px;padding:10px 12px}
+}
+@media (min-width:600px){
+  body{background:#06050B}
+  html[data-theme="light"] body{background:#E9E5F7}
+  #app{box-shadow:0 0 0 1px var(--border)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- ============================================================
+       HTML: WELCOME SCREEN
+       ============================================================ -->
+  <section class="screen active" id="screen-welcome">
+    <div class="welcome-glow" aria-hidden="true"></div>
+    <div class="welcome-inner">
+      <span class="brand-mark brand-mark--xl" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+          <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+          <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <circle cx="24.6" cy="13.1" r="1.4" fill="#B69AFF"/>
+        </svg>
+      </span>
+      <h1 class="welcome-title">NexaLearn</h1>
+      <p class="welcome-tagline">LEARN. UNDERSTAND. MASTER.</p>
+      <p class="welcome-sub">Your personal AI-powered learning companion.</p>
+      <p class="welcome-intro">
+        Understand difficult subjects, explore new topics, and learn at your own pace
+        with your personal AI tutor.
+      </p>
+      <div class="welcome-actions">
+        <button class="btn btn--primary" data-action="get-started">Get Started</button>
+        <button class="btn btn--ghost" data-action="explore">Explore Platform</button>
+      </div>
+      <p class="welcome-foot">Independent learning platform · Built for students everywhere</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HTML: HOME DASHBOARD
+       ============================================================ -->
+  <section class="screen" id="screen-home">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+            <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+            <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                  stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">NexaLearn</span>
+      </div>
+      <button class="avatar" data-nav="profile" aria-label="Open profile" id="header-avatar">S</button>
+    </header>
+
+    <div class="page">
+      <h1 class="greeting" id="greeting">Hello, Student 👋</h1>
+      <p class="muted greeting-sub">What would you like to learn today?</p>
+
+      <div id="continue-card"></div>
+
+      <h2 class="section-title">Your Courses</h2>
+      <div class="course-grid" id="home-courses"></div>
+
+      <div class="ai-card">
+        <div class="ai-card__glow" aria-hidden="true"></div>
+        <div class="ai-card__top">
+          <span class="ai-card__icon"><i data-lucide="sparkles"></i></span>
+          <span class="pill pill--soft">AI Tutor</span>
+        </div>
+        <h2 class="ai-card__title">Meet your AI Tutor</h2>
+        <p class="ai-card__text">
+          Ask questions, understand difficult concepts, and learn step by step.
+        </p>
+        <button class="btn btn--primary" data-action="start-learning">
+          <i data-lucide="message-circle"></i> Start Learning
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HTML: LEARN (COURSE SELECTION)
+       ============================================================ -->
+  <section class="screen" id="screen-learn">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+            <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+            <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                  stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">NexaLearn</span>
+      </div>
+      <button class="avatar" data-nav="profile" aria-label="Open profile">S</button>
+    </header>
+
+    <div class="page">
+      <h1 class="screen-heading">Explore Courses</h1>
+      <p class="muted">Choose a subject and start learning.</p>
+
+      <div class="search">
+        <i data-lucide="search"></i>
+        <input id="course-search" type="search" placeholder="Search courses or topics..." autocomplete="off" aria-label="Search courses" />
+      </div>
+
+      <div id="learn-courses" class="course-list"></div>
+      <div id="learn-empty" class="empty-state hidden">
+        <i data-lucide="circle-help"></i>
+        <p>No matching courses found.</p>
+        <span>Try a different course code or topic name.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HTML: COURSE DETAIL
+       ============================================================ -->
+  <section class="screen" id="screen-course">
+    <header class="app-header">
+      <button class="icon-btn" data-action="back" aria-label="Go back"><i data-lucide="arrow-left"></i></button>
+      <span class="header-title">Course</span>
+      <span class="header-spacer"></span>
+    </header>
+    <div class="page" id="course-page"></div>
+  </section>
+
+  <!-- ============================================================
+       HTML: LESSON SCREEN
+       ============================================================ -->
+  <section class="screen" id="screen-lesson">
+    <header class="app-header">
+      <button class="icon-btn" data-action="back" aria-label="Go back"><i data-lucide="arrow-left"></i></button>
+      <span class="header-title">Lesson</span>
+      <span class="header-spacer"></span>
+    </header>
+    <div class="page" id="lesson-page"></div>
+  </section>
+
+  <!-- ============================================================
+       HTML: AI CLASSROOM
+       ============================================================ -->
+  <section class="screen screen--flush" id="screen-classroom">
+    <header class="class-header">
+      <button class="icon-btn" data-action="back" aria-label="Go back"><i data-lucide="arrow-left"></i></button>
+      <div class="class-header__meta">
+        <h2>AI Classroom</h2>
+        <p id="class-context">GST 111 • Communication Skills</p>
+      </div>
+      <button class="ai-status ai-status--simulated" id="ai-status" data-action="open-settings" title="Tap to test connection">
+        <span class="ai-status__dot"></span>
+        <span class="ai-status__label">Simulated</span>
+      </button>
+    </header>
+
+    <div class="chat" id="chat" aria-live="polite"></div>
+
+    <div class="chat-suggestions" id="chat-suggestions">
+      <button class="chip" data-prompt="Explain this topic simply">Explain this topic simply</button>
+      <button class="chip" data-prompt="Give me examples">Give me examples</button>
+      <button class="chip" data-prompt="What are the key points?">What are the key points?</button>
+      <button class="chip" data-prompt="Test my understanding">Test my understanding</button>
+    </div>
+
+    <div class="teach-controls">
+      <button class="chip chip--accent" data-action="explain-simpler">Explain simpler</button>
+      <button class="chip chip--accent" data-action="give-example">Give an example</button>
+      <button class="chip chip--accent" data-action="quiz-me">Quiz me</button>
+    </div>
+
+    <form class="composer" id="composer" autocomplete="off">
+      <textarea id="chat-input" rows="1" placeholder="Ask your tutor anything..." aria-label="Message"></textarea>
+      <button class="send-btn" type="submit" aria-label="Send message"><i data-lucide="send"></i></button>
+    </form>
+  </section>
+
+  <!-- ============================================================
+       HTML: PRACTICE SCREEN
+       ============================================================ -->
+  <section class="screen" id="screen-practice">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+            <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+            <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                  stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">NexaLearn</span>
+      </div>
+      <button class="avatar" data-nav="profile" aria-label="Open profile">S</button>
+    </header>
+
+    <div class="page">
+      <div id="practice-picker">
+        <h1 class="screen-heading">Practice</h1>
+        <p class="muted">Test your understanding.</p>
+        <div id="practice-list"></div>
+      </div>
+      <div id="practice-quiz" class="hidden"></div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HTML: PROFILE SCREEN
+       ============================================================ -->
+  <section class="screen" id="screen-profile">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32">
+            <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+            <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+            <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                  stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-name">NexaLearn</span>
+      </div>
+      <button class="icon-btn" data-action="open-settings" aria-label="Open settings"><i data-lucide="settings"></i></button>
+    </header>
+
+    <div class="page">
+      <div class="profile-head">
+        <button class="profile-avatar" id="profile-avatar" data-action="edit-profile" aria-label="Edit profile">S</button>
+        <h1 class="profile-name" id="profile-name">Student</h1>
+        <p class="muted small" id="profile-email">student@nexalearn.app</p>
+        <span class="pill pill--soft">Learner</span>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat__value" id="stat-courses">0</span>
+          <span class="stat__label">Courses started</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="stat-lessons">0</span>
+          <span class="stat__label">Lessons completed</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value" id="stat-quizzes">0</span>
+          <span class="stat__label">Quiz attempts</span>
+        </div>
+      </div>
+
+      <h2 class="section-title">Settings</h2>
+      <div class="card settings-card">
+        <div class="setting-row">
+          <span class="setting-row__icon"><i data-lucide="moon"></i></span>
+          <div class="setting-row__text">
+            <span>Dark mode</span>
+            <span class="muted small">Easier on the eyes at night</span>
+          </div>
+          <button class="switch is-on" id="switch-theme" data-action="toggle-theme" role="switch" aria-checked="true" aria-label="Toggle dark mode"><span></span></button>
+        </div>
+
+        <div class="setting-row">
+          <span class="setting-row__icon"><i data-lucide="bell"></i></span>
+          <div class="setting-row__text">
+            <span>Notifications</span>
+            <span class="muted small">Study reminders — coming soon</span>
+          </div>
+          <button class="switch" id="switch-notifications" data-action="toggle-notifications" role="switch" aria-checked="false" aria-disabled="true" aria-label="Notifications coming soon"><span></span></button>
+        </div>
+
+        <button class="setting-row" data-action="open-settings">
+          <span class="setting-row__icon"><i data-lucide="sparkles"></i></span>
+          <div class="setting-row__text">
+            <span>AI Tutor &amp; Data</span>
+            <span class="muted small" id="ai-config-hint">Simulated mode</span>
+          </div>
+          <span class="chev"><i data-lucide="chevron-right"></i></span>
+        </button>
+
+        <button class="setting-row" data-action="open-about">
+          <span class="setting-row__icon"><i data-lucide="info"></i></span>
+          <div class="setting-row__text">
+            <span>About NexaLearn</span>
+            <span class="muted small">Version 1.0 · Deployment guide</span>
+          </div>
+          <span class="chev"><i data-lucide="chevron-right"></i></span>
+        </button>
+      </div>
+
+      <p class="profile-foot">NexaLearn · Learn. Understand. Master.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       HTML: SETTINGS SCREEN
+       ============================================================ -->
+  <section class="screen" id="screen-settings">
+    <header class="app-header">
+      <button class="icon-btn" data-action="back" aria-label="Go back"><i data-lucide="arrow-left"></i></button>
+      <span class="header-title">Settings</span>
+      <span class="header-spacer"></span>
+    </header>
+
+    <div class="page">
+
+      <!-- AI Tutor -->
+      <div class="settings-section">
+        <h2>AI Tutor</h2>
+        <div class="settings-block">
+          <div class="setting-row" style="padding-top:0">
+            <span class="setting-row__icon"><i data-lucide="sparkles"></i></span>
+            <div class="setting-row__text">
+              <span>Status</span>
+              <span class="muted small" id="settings-ai-status">Checking…</span>
+            </div>
+            <div class="ai-status ai-status--simulated" id="settings-ai-badge">
+              <span class="ai-status__dot"></span>
+              <span class="ai-status__label">—</span>
+            </div>
+          </div>
+          <p class="form-help" style="margin-top:12px">
+            The AI tutor is powered by <strong>Groq</strong> via NexaLearn's secure backend.
+            The API key is stored server-side and never exposed in the browser.
+            If the backend is unreachable, the app falls back to the built-in offline tutor automatically.
+          </p>
+          <div class="settings-actions">
+            <button type="button" class="btn btn--soft" data-action="test-ai">Test Connection</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data & Backup -->
+      <div class="settings-section">
+        <h2>Data &amp; Backup</h2>
+        <div class="settings-block">
+          <p class="muted small" style="margin-bottom:14px">
+            Your progress is saved in this browser. Export a backup to keep it safe
+            or move it to another device.
+          </p>
+          <div class="settings-actions">
+            <button class="btn btn--soft" data-action="export-data">Export</button>
+            <button class="btn btn--soft" data-action="import-data">Import</button>
+            <button class="btn btn--danger" data-action="reset-data">Reset</button>
+          </div>
+          <input id="import-file" type="file" accept="application/json,.json" hidden />
+        </div>
+      </div>
+
+      <!-- Install (PWA) -->
+      <div class="settings-section" id="install-section">
+        <h2>Install</h2>
+        <div class="settings-block" id="install-block">
+          <p class="muted small" id="install-text">
+            Install NexaLearn to your home screen for a full-screen, app-like experience —
+            and access your lessons even when offline.
+          </p>
+          <div class="settings-actions" style="margin-top:12px">
+            <button class="btn btn--primary" data-action="install-app" id="install-btn" disabled>
+              Install App
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="profile-foot" style="margin-top:30px">NexaLearn · v1.0</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============================================================
+     HTML: BOTTOM NAVIGATION
+     ============================================================ -->
+<nav class="tabbar is-hidden" id="tabbar" aria-label="Main navigation">
+  <button class="tab" data-nav="home"><i data-lucide="house"></i><span>Home</span></button>
+  <button class="tab" data-nav="learn"><i data-lucide="book-open"></i><span>Learn</span></button>
+  <button class="tab" data-nav="practice"><i data-lucide="brain"></i><span>Practice</span></button>
+  <button class="tab" data-nav="profile"><i data-lucide="user-round"></i><span>Profile</span></button>
+</nav>
+
+<!-- ============================================================
+     HTML: ABOUT MODAL
+     ============================================================ -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__backdrop" data-action="close-modal"></div>
+  <div class="modal__sheet" role="dialog" aria-modal="true" aria-label="About NexaLearn">
+    <div class="modal__head">
+      <h3>About NexaLearn</h3>
+      <button class="icon-btn icon-btn--sm" data-action="close-modal" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal__body">
+      <p><strong>NexaLearn</strong> — Learn. Understand. Master.</p>
+      <p>An independent AI-powered learning platform. Structured lessons, personalised explanations, interactive practice.</p>
+
+      <p><strong>AI modes</strong></p>
+      <ul>
+        <li><strong>Live</strong> — replies from Groq via NexaLearn's secure backend.</li>
+        <li><strong>Simulated</strong> — built-in offline tutor when the backend is unreachable.</li>
+      </ul>
+
+      <p><strong>Privacy</strong></p>
+      <p>Your progress is stored only in this browser's local storage. The Groq API key lives on the server, never in your browser.</p>
+
+      <p><strong>Offline use</strong></p>
+      <p>NexaLearn is installable as a Progressive Web App. After the first visit, you can open it from your home screen and study lessons even without internet. The AI tutor falls back to Simulated mode while offline.</p>
+
+      <p class="muted small">Version 1.0 · Lesson content is demonstration material and should be replaced with verified course materials before official use.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     HTML: EDIT PROFILE MODAL
+     ============================================================ -->
+<div class="modal" id="modal-edit-profile" aria-hidden="true">
+  <div class="modal__backdrop" data-action="close-modal"></div>
+  <div class="modal__sheet" role="dialog" aria-modal="true" aria-label="Edit Profile">
+    <div class="modal__head">
+      <h3>Edit Profile</h3>
+      <button class="icon-btn icon-btn--sm" data-action="close-modal" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal__body">
+      <form id="edit-profile-form" autocomplete="off">
+        <label class="form-label" for="edit-name">Your name</label>
+        <input id="edit-name" class="form-input" type="text" maxlength="40" placeholder="Student" />
+
+        <label class="form-label" for="edit-email">Email (optional)</label>
+        <input id="edit-email" class="form-input" type="email" maxlength="80" placeholder="you@example.com" />
+
+        <div class="settings-actions">
+          <button type="submit" class="btn btn--primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- ============================================================
+     JAVASCRIPT: Main Application
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================
+     JAVASCRIPT: UTILITIES
+     ========================================================== */
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  /**
+   * Safely converts a restricted markdown-like string to HTML.
+   * Escapes everything first, then applies formatting. Safe for AI output.
+   */
+  function richText(src) {
+    const inline = s => esc(s)
+      .replace(/\*\*([^*]+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    const lines = String(src == null ? '' : src).split('\n');
+    let html = '', list = null, inCode = false, codeBuf = [];
+    const closeList = () => { if (list) { html += '</' + list + '>'; list = null; } };
+    const flushCode = () => {
+      if (inCode) {
+        html += '<pre><code>' + esc(codeBuf.join('\n')) + '</code></pre>';
+        codeBuf = []; inCode = false;
+      }
+    };
+
+    lines.forEach(raw => {
+      if (raw.trim().startsWith('```')) {
+        if (inCode) flushCode(); else { closeList(); inCode = true; }
+        return;
+      }
+      if (inCode) { codeBuf.push(raw); return; }
+      const line = raw.trim();
+      if (!line) { closeList(); return; }
+      if (/^#{1,4}\s+/.test(line)) {
+        closeList();
+        html += '<h4>' + inline(line.replace(/^#{1,4}\s+/, '')) + '</h4>';
+        return;
+      }
+      if (/^[-•]\s+/.test(line)) {
+        if (list !== 'ul') { closeList(); html += '<ul>'; list = 'ul'; }
+        html += '<li>' + inline(line.replace(/^[-•]\s+/, '')) + '</li>';
+        return;
+      }
+      if (/^\d+\.\s+/.test(line)) {
+        if (list !== 'ol') { closeList(); html += '<ol>'; list = 'ol'; }
+        html += '<li>' + inline(line.replace(/^\d+\.\s+/, '')) + '</li>';
+        return;
+      }
+      closeList();
+      html += '<p>' + inline(line) + '</p>';
+    });
+    flushCode();
+    closeList();
+    return html;
+  }
+
+  function refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      try { window.lucide.createIcons(); } catch (e) {}
+    }
+  }
+
+  let toastTimer = null;
+  function showToast(message, kind) {
+    const el = $('#toast');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.remove('is-error', 'is-success');
+    if (kind === 'error') el.classList.add('is-error');
+    else if (kind === 'success') el.classList.add('is-success');
+    el.classList.add('is-visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2800);
+  }
+
+  function initialsOf(name) {
+    const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+    if (!parts.length) return 'S';
+    return parts.slice(0, 2).map(w => w[0].toUpperCase()).join('');
+  }
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  /* ==========================================================
+     JAVASCRIPT: COURSE DATA
+     ========================================================== */
+  const COURSES = [
+    {
+      id: 'gst111', code: 'GST 111', title: 'Use of English',
+      subtitle: 'Communication Skills in English', icon: 'book-open', color: '#7C4DFF',
+      topics: [
+        {
+          id: 'gst111-t1', title: 'Communication Skills',
+          desc: 'How meaning is created, sent and received between people.',
+          mins: 9,
+          intro: 'Communication is the process of exchanging information, ideas and feelings through a shared system of symbols. In academic and professional life, clear communication decides whether your ideas are understood or ignored.',
+          objectives: [
+            'Define communication and identify its core elements.',
+            'Distinguish between verbal and non-verbal communication.',
+            'Recognise barriers that distort messages and how to reduce them.'
+          ],
+          sections: [
+            { h: 'The communication process', p: 'Every act of communication involves a **sender**, a **message**, a **channel**, a **receiver** and **feedback**. The sender encodes an idea into words or signals, the message travels through a channel such as speech, writing or a screen, and the receiver decodes it. Feedback closes the loop and tells the sender whether the message landed correctly.' },
+            { h: 'Verbal and non-verbal channels', p: 'Verbal communication uses words — spoken or written. Non-verbal communication uses tone, posture, facial expression, eye contact, gesture and even silence. Non-verbal cues often carry more weight than words, because they reveal attitude and sincerity.' },
+            { h: 'Barriers to effective communication', p: 'Physical noise, poor vocabulary, emotional stress, cultural differences and assumptions all distort meaning. A good communicator removes barriers before sending: choose simple words, confirm understanding, and invite questions.' }
+          ],
+          concepts: [
+            { t: 'Encoding', d: 'Turning an idea into words, signs or symbols the receiver can understand.' },
+            { t: 'Feedback', d: 'The receiver’s response, which confirms or corrects the message.' },
+            { t: 'Noise', d: 'Anything that interferes with the message between sender and receiver.' }
+          ],
+          examples: [
+            'A lecturer who pauses after a complex point and asks “Does that make sense?” is collecting feedback.',
+            'A student who folds their arms and looks away sends a non-verbal message of disinterest, even while saying “I understand”.'
+          ],
+          quiz: [
+            { q: 'Which element closes the communication loop?', o: ['Encoding','Channel','Feedback','Noise'], a: 2, e: 'Feedback tells the sender whether the message was received as intended, so it completes the loop.' },
+            { q: 'Folding your arms while a lecturer speaks is an example of…', o: ['Verbal communication','Non-verbal communication','Written communication','Encoding failure'], a: 1, e: 'Body language such as arm folding is non-verbal communication.' },
+            { q: 'A noisy generator outside the classroom is best described as…', o: ['Feedback','A channel','Physical noise','Encoding'], a: 2, e: 'Physical noise is any environmental interference that distorts the message.' }
+          ]
+        },
+        {
+          id: 'gst111-t2', title: 'Grammar',
+          desc: 'Sentence structure, tense and agreement in academic English.',
+          mins: 10,
+          intro: 'Grammar is the system of rules that holds a language together. In academic writing, grammatical accuracy protects your meaning — a single wrong tense can change what you claim happened.',
+          objectives: [
+            'Identify the basic parts of a sentence.',
+            'Apply subject–verb agreement correctly.',
+            'Choose the right tense for academic statements.'
+          ],
+          sections: [
+            { h: 'Parts of a sentence', p: 'A complete sentence needs a **subject** and a **predicate**. The subject is who or what the sentence is about; the predicate contains the verb and says something about the subject. Objects, complements and modifiers add detail but cannot replace the core.' },
+            { h: 'Subject–verb agreement', p: 'A singular subject takes a singular verb, and a plural subject takes a plural verb. Watch out for phrases between the subject and verb: in “The list of students **is** long”, the subject is “list”, not “students”.' },
+            { h: 'Tense in academic writing', p: 'Use the present tense for general facts, the past tense for completed research actions, and the present perfect for findings that remain relevant. Keep one consistent tense inside a single idea.' }
+          ],
+          concepts: [
+            { t: 'Subject', d: 'The person, thing or idea that performs or receives the action.' },
+            { t: 'Agreement', d: 'Matching a verb to its subject in number and person.' },
+            { t: 'Clause', d: 'A group of words containing a subject and a verb.' }
+          ],
+          examples: [
+            'Wrong: “The results of the test shows improvement.” Right: “The results of the test show improvement.”',
+            'Wrong: “He have submitted the assignment.” Right: “He has submitted the assignment.”'
+          ],
+          quiz: [
+            { q: 'Choose the correct sentence.', o: ['The data shows a clear trend.','The data show a clear trend.','The datas shows a clear trend.','The data showing a clear trend.'], a: 0, e: '“Data” is commonly treated as a singular mass noun in modern usage.' },
+            { q: 'In “The list of students is long”, the subject is…', o: ['students','list','long','of students'], a: 1, e: 'The head of the subject phrase is “list”, which is singular.' },
+            { q: 'Which tense suits a general scientific fact?', o: ['Past tense','Future tense','Present tense','Past perfect'], a: 2, e: 'General facts and universal truths take the present tense.' }
+          ]
+        },
+        {
+          id: 'gst111-t3', title: 'Vocabulary',
+          desc: 'Building the word power needed for academic reading and writing.',
+          mins: 8,
+          intro: 'Vocabulary is the raw material of expression. A wide, precise vocabulary lets you say exactly what you mean, and it improves both your reading speed and your writing confidence.',
+          objectives: [
+            'Use context clues to guess the meaning of unfamiliar words.',
+            'Distinguish synonyms from words with related but different meanings.',
+            'Build a personal word-learning routine.'
+          ],
+          sections: [
+            { h: 'Context clues', p: 'Writers often signal meaning through the words around an unfamiliar term. Definitions, examples, contrasts and cause–effect relationships all act as clues. In “The drug is **efficacious**, that is, it produces the intended effect”, the phrase after the comma defines the word.' },
+            { h: 'Precision over decoration', p: 'Academic writing rewards precision. “Big” becomes “substantial” when describing an effect size; “said” becomes “argued” when describing a claim. Choose the word that carries the exact shade of meaning you need.' }
+          ],
+          concepts: [
+            { t: 'Synonym', d: 'A word with a similar meaning, but rarely an identical one.' },
+            { t: 'Collocation', d: 'Words that naturally occur together, such as “conduct research”.' },
+            { t: 'Register', d: 'The level of formality appropriate to a context.' }
+          ],
+          examples: [
+            '“Conduct research” is correct; “do research” is acceptable in speech but weaker in formal writing.',
+            '“Cheap” and “inexpensive” are near-synonyms, but “cheap” can imply poor quality.'
+          ],
+          quiz: [
+            { q: 'In “The patient was lethargic, that is, unusually tired”, the clue type is…', o: ['Contrast','Definition','Cause–effect','Example'], a: 1, e: 'The phrase “that is” explicitly restates the meaning, which is a definition clue.' },
+            { q: 'Which is the most academic collocation?', o: ['Do research','Make research','Conduct research','Take research'], a: 2, e: '“Conduct research” is the standard formal collocation.' },
+            { q: '“Inexpensive” differs from “cheap” mainly in…', o: ['Spelling','Register and connotation','Tense','Number'], a: 1, e: 'Both mean low cost, but “cheap” can carry a negative connotation.' }
+          ]
+        },
+        {
+          id: 'gst111-t4', title: 'Comprehension',
+          desc: 'Reading actively, finding main ideas and reading between the lines.',
+          mins: 9,
+          intro: 'Comprehension is the ability to extract meaning from a text and connect it to what you already know. It is an active skill: you predict, question, summarise and infer as you read.',
+          objectives: [
+            'Locate the main idea and supporting details in a passage.',
+            'Distinguish literal meaning from inference.',
+            'Summarise a text in your own words.'
+          ],
+          sections: [
+            { h: 'Skimming and scanning', p: '**Skimming** is a fast read for the general idea — look at headings, first sentences and conclusions. **Scanning** is a targeted search for specific information such as a date, name or figure.' },
+            { h: 'Main idea, details and inference', p: 'The main idea is the point the writer wants you to accept. Supporting details explain, prove or illustrate it. An inference is a conclusion you draw from evidence that is not stated outright.' }
+          ],
+          concepts: [
+            { t: 'Main idea', d: 'The central claim of a passage, usually found in the introduction or conclusion.' },
+            { t: 'Inference', d: 'A logical conclusion based on evidence rather than explicit statement.' },
+            { t: 'Paraphrase', d: 'Restating meaning in your own words while keeping the original sense.' }
+          ],
+          examples: [
+            'If a passage lists three failed policies and ends with “This approach needs urgent review”, the inference is that the writer opposes the policies.',
+            'A summary of a paragraph about rainfall should mention rainfall, not every example city named.'
+          ],
+          quiz: [
+            { q: 'Scanning is best used when you need to…', o: ['Understand the overall argument','Find a specific figure','Memorise the passage','Judge the writer’s style'], a: 1, e: 'Scanning is a targeted search for a specific piece of information.' },
+            { q: 'An inference is…', o: ['Directly stated in the text','A conclusion drawn from evidence','The title of the passage','A grammar rule'], a: 1, e: 'Inference means reading between the lines to reach a supported conclusion.' },
+            { q: 'A good summary should…', o: ['Copy the passage word for word','Include every example','Restate the main points briefly','Add your personal opinion'], a: 2, e: 'A summary restates the main points concisely in your own words.' }
+          ]
+        },
+        {
+          id: 'gst111-t5', title: 'Essay Writing',
+          desc: 'Planning, structuring and supporting a written argument.',
+          mins: 11,
+          intro: 'An essay is a sustained argument, not a collection of sentences. Good essays are planned before they are written, structured around a clear thesis, and supported with evidence.',
+          objectives: [
+            'Build an outline with a clear thesis statement.',
+            'Write effective introduction, body and conclusion paragraphs.',
+            'Link ideas with appropriate cohesive devices.'
+          ],
+          sections: [
+            { h: 'Structure', p: 'A standard essay has three movements. The **introduction** states the topic and the thesis. The **body** develops one idea per paragraph, each opened by a topic sentence. The **conclusion** restates the thesis in light of the evidence and offers a final thought.' },
+            { h: 'Cohesion and coherence', p: 'Cohesion is how sentences stick together; coherence is how the whole piece makes sense. Use transitions such as “however”, “therefore” and “in addition” sparingly and accurately.' },
+            { h: 'Evidence and citation', p: 'Claims need support. Use examples, statistics, definitions and quotations, and always credit the source. An uncited borrowed idea is plagiarism, even if it is paraphrased.' }
+          ],
+          concepts: [
+            { t: 'Thesis statement', d: 'A single sentence stating the central argument of the essay.' },
+            { t: 'Topic sentence', d: 'The first sentence of a paragraph, announcing its main idea.' },
+            { t: 'Cohesion', d: 'The use of linking devices to connect sentences and paragraphs smoothly.' }
+          ],
+          examples: [
+            'Weak thesis: “Technology is important.” Strong thesis: “Mobile learning improves revision outcomes because it supports spaced repetition.”',
+            'A body paragraph that begins “Furthermore” but introduces an opposing view is misusing the transition.'
+          ],
+          quiz: [
+            { q: 'A thesis statement should…', o: ['List every point you will make','State the central argument clearly','Appear only in the conclusion','Be a question'], a: 1, e: 'The thesis states the essay’s central claim, which the body then supports.' },
+            { q: 'The purpose of a topic sentence is to…', o: ['End a paragraph','Introduce the paragraph’s main idea','Quote a source','Define a term'], a: 1, e: 'A topic sentence announces the main idea of the paragraph it opens.' },
+            { q: 'Using a source’s idea without credit is called…', o: ['Paraphrasing','Summarising','Plagiarism','Referencing'], a: 2, e: 'Uncredited use of another person’s idea, even paraphrased, is plagiarism.' }
+          ]
+        },
+        {
+          id: 'gst111-t6', title: 'Oral English',
+          desc: 'Pronunciation, stress, intonation and effective public speaking.',
+          mins: 8,
+          intro: 'Oral English is about being understood, not about sounding like a broadcaster. Clear pronunciation, sensible stress and confident delivery matter more than an accent ever will.',
+          objectives: [
+            'Place stress correctly in common English words.',
+            'Use intonation to signal meaning and attitude.',
+            'Prepare and deliver a short presentation.'
+          ],
+          sections: [
+            { h: 'Stress and rhythm', p: 'English is a stress-timed language: some syllables are strong and others are reduced. In “PHOtograph”, “phoTOgraphy” and “photoGRAPHic”, the stress moves. Wrong stress can make an otherwise correct sentence hard to follow.' },
+            { h: 'Intonation', p: 'Intonation is the rise and fall of the voice. A falling tone signals certainty and completeness; a rising tone signals a question or uncertainty.' }
+          ],
+          concepts: [
+            { t: 'Stress', d: 'The emphasis placed on a particular syllable in a word.' },
+            { t: 'Intonation', d: 'The melody of speech — the rise and fall of pitch.' },
+            { t: 'Articulation', d: 'How clearly speech sounds are produced.' }
+          ],
+          examples: [
+            '“I didn’t say he stole it” changes meaning depending on which word you stress.',
+            'A rising intonation at the end of a statement can turn it into a question.'
+          ],
+          quiz: [
+            { q: 'In “photography”, the stress falls on the…', o: ['First syllable','Second syllable','Third syllable','Fourth syllable'], a: 1, e: 'Pho-TOG-ra-phy places the primary stress on the second syllable.' },
+            { q: 'A falling intonation at the end of a sentence usually signals…', o: ['Uncertainty','Certainty and completion','A question','Anger'], a: 1, e: 'A falling tone typically signals certainty and the end of an idea.' },
+            { q: 'Clear articulation mainly helps the speaker to…', o: ['Sound foreign','Be understood by listeners','Speak faster','Avoid grammar'], a: 1, e: 'Articulation is about being intelligible to your audience.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'mth111', code: 'MTH 111', title: 'Mathematics',
+      subtitle: 'Foundations of Algebra and Number', icon: 'calculator', color: '#4DA3FF',
+      topics: [
+        {
+          id: 'mth111-t1', title: 'Number Systems',
+          desc: 'Natural, integer, rational and real numbers.',
+          mins: 8,
+          intro: 'Numbers are organised into sets, and each set extends the one before it. Understanding these sets prevents errors when you solve equations and check whether an answer is even possible.',
+          objectives: [
+            'List the main number sets and their symbols.',
+            'Classify a number correctly.',
+            'Explain why division by zero is undefined.'
+          ],
+          sections: [
+            { h: 'The number sets', p: '**Natural numbers** are the counting numbers 1, 2, 3. **Integers** add zero and negatives. **Rational numbers** can be written as a fraction of two integers. **Irrational numbers** cannot — such as the square root of 2 and pi.' },
+            { h: 'Why division by zero fails', p: 'Division asks how many times the divisor fits. Dividing by zero has no answer, because no number of zeros can ever produce a non-zero result.' }
+          ],
+          concepts: [
+            { t: 'Rational number', d: 'A number expressible as a/b where a and b are integers and b is not zero.' },
+            { t: 'Irrational number', d: 'A real number that cannot be written as a simple fraction.' },
+            { t: 'Real number', d: 'Any point on the number line — rational or irrational.' }
+          ],
+          examples: [
+            '0.75 is rational because it equals 3/4.',
+            'The square root of 9 is 3 (rational), but the square root of 2 is irrational.'
+          ],
+          quiz: [
+            { q: 'Which of these is irrational?', o: ['0.5','The square root of 16','The square root of 7','-3'], a: 2, e: 'The square root of 7 is not a perfect square, so its decimal never terminates or repeats.' },
+            { q: 'Which set includes zero and negative whole numbers?', o: ['Natural numbers','Integers','Irrational numbers','Prime numbers'], a: 1, e: 'Integers include negatives, zero and positive whole numbers.' },
+            { q: 'Division by zero is…', o: ['Equal to zero','Undefined','Infinite','Equal to one'], a: 1, e: 'No value satisfies division by zero, so the operation is undefined.' }
+          ]
+        },
+        {
+          id: 'mth111-t2', title: 'Algebraic Expressions',
+          desc: 'Simplifying, expanding and factorising expressions.',
+          mins: 9,
+          intro: 'Algebra replaces unknown numbers with letters so you can reason about patterns. Simplifying and factorising are the two core skills that make equations solvable.',
+          objectives: [
+            'Collect like terms correctly.',
+            'Expand brackets using the distributive law.',
+            'Factorise simple quadratic expressions.'
+          ],
+          sections: [
+            { h: 'Like terms and the distributive law', p: 'Only **like terms** can be combined: 3x and 5x add to 8x, but 3x and 5x squared cannot be added. The distributive law states a(b + c) equals ab + ac.' },
+            { h: 'Factorising quadratics', p: 'To factorise x squared + bx + c, find two numbers that multiply to c and add to b. For x squared + 5x + 6, those numbers are 2 and 3, giving (x + 2)(x + 3).' }
+          ],
+          concepts: [
+            { t: 'Like terms', d: 'Terms with identical variable parts.' },
+            { t: 'Distributive law', d: 'a(b + c) equals ab + ac.' },
+            { t: 'Factorisation', d: 'Rewriting an expression as a product of simpler expressions.' }
+          ],
+          examples: [
+            '2(3x + 4) = 6x + 8',
+            'x squared + 7x + 12 = (x + 3)(x + 4)'
+          ],
+          quiz: [
+            { q: 'Simplify 4x + 3y - 2x + y.', o: ['2x + 4y','6x + 4y','2x + 2y','7xy'], a: 0, e: '4x - 2x = 2x and 3y + y = 4y, giving 2x + 4y.' },
+            { q: 'Expand 3(2a - 5).', o: ['6a - 5','6a - 15','5a - 15','6a + 15'], a: 1, e: 'Multiply each term inside the bracket by 3: 6a - 15.' },
+            { q: 'Factorise x squared + 8x + 15.', o: ['(x + 3)(x + 5)','(x + 1)(x + 15)','(x + 2)(x + 7)','(x - 3)(x - 5)'], a: 0, e: '3 times 5 = 15 and 3 + 5 = 8, so the factors are (x + 3)(x + 5).' }
+          ]
+        },
+        {
+          id: 'mth111-t3', title: 'Trigonometric Ratios',
+          desc: 'Sine, cosine and tangent in right-angled triangles.',
+          mins: 10,
+          intro: 'Trigonometry connects the angles of a triangle to the lengths of its sides. It is the mathematical bridge between shape and measurement.',
+          objectives: [
+            'State the sine, cosine and tangent ratios.',
+            'Use SOH-CAH-TOA to find a missing side.',
+            'Apply the ratios to real-world heights and distances.'
+          ],
+          sections: [
+            { h: 'The three ratios', p: 'In a right-angled triangle, **sin = opposite / hypotenuse**, **cos = adjacent / hypotenuse** and **tan = opposite / adjacent**. The mnemonic SOH-CAH-TOA keeps them in order.' },
+            { h: 'Using the ratios', p: 'Label the sides relative to the angle you know. Choose the ratio containing the two quantities you are connecting, substitute the values, then solve for the unknown.' }
+          ],
+          concepts: [
+            { t: 'Hypotenuse', d: 'The longest side, opposite the right angle.' },
+            { t: 'Tangent', d: 'The ratio of the opposite side to the adjacent side.' },
+            { t: 'Angle of elevation', d: 'The angle between the horizontal and a line of sight looking upward.' }
+          ],
+          examples: [
+            'A 10 m ladder leaning at 60 degrees reaches a height of 10 times sin(60), about 8.66 m.',
+            'If the opposite side is 5 and the adjacent is 12, then tan(theta) = 5/12.'
+          ],
+          quiz: [
+            { q: 'sin(theta) equals…', o: ['adjacent / hypotenuse','opposite / hypotenuse','opposite / adjacent','hypotenuse / opposite'], a: 1, e: 'SOH: sine is opposite over hypotenuse.' },
+            { q: 'If tan(theta) = 3/4, the opposite-to-adjacent ratio is…', o: ['3 : 4','4 : 3','3 : 5','5 : 4'], a: 0, e: 'tan(theta) = opposite / adjacent, so the ratio is 3 : 4.' },
+            { q: 'The hypotenuse is always…', o: ['The shortest side','Opposite the right angle','Adjacent to the right angle','Equal to the sum of the legs'], a: 1, e: 'The hypotenuse lies opposite the right angle and is the longest side.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'phy111', code: 'PHY 111', title: 'Physics',
+      subtitle: 'Mechanics, Motion and Energy', icon: 'atom', color: '#35D69A',
+      topics: [
+        {
+          id: 'phy111-t1', title: 'Measurement and Units',
+          desc: 'SI units, dimensions and measurement uncertainty.',
+          mins: 8,
+          intro: 'Physics begins with measurement. Every physical quantity is a number attached to a unit, and ignoring units is one of the most common sources of error in calculations.',
+          objectives: [
+            'Identify the seven SI base units.',
+            'Convert between common prefixes.',
+            'Explain why every measurement has uncertainty.'
+          ],
+          sections: [
+            { h: 'SI base units', p: 'The seven SI base units are the metre (length), kilogram (mass), second (time), ampere (current), kelvin (temperature), mole (amount of substance) and candela (luminous intensity).' },
+            { h: 'Uncertainty', p: 'No measurement is exact. Instruments have limited precision, and observers introduce error. Quoting a result as 5.0 cm instead of 5 cm honestly signals that the ruler reads to one decimal place.' }
+          ],
+          concepts: [
+            { t: 'Derived unit', d: 'A unit formed by combining base units, such as newton = kg m/s squared.' },
+            { t: 'Prefix', d: 'A multiplier such as kilo (10 cubed) or milli (10 to the minus 3).' },
+            { t: 'Uncertainty', d: 'The range within which the true value is expected to lie.' }
+          ],
+          examples: [
+            '1 km = 1000 m, and 1 mm = 0.001 m.',
+            'A force of 10 N equals 10 kg m/s squared.'
+          ],
+          quiz: [
+            { q: 'Which is an SI base unit?', o: ['Newton','Joule','Kelvin','Watt'], a: 2, e: 'The kelvin is the SI base unit of thermodynamic temperature.' },
+            { q: '1 millimetre equals…', o: ['0.1 m','0.01 m','0.001 m','1000 m'], a: 2, e: 'The prefix milli means one thousandth, so 1 mm = 0.001 m.' },
+            { q: 'The newton is a derived unit equal to…', o: ['kg m/s squared','kg m/s','kg/m squared','kg s'], a: 0, e: 'Force = mass times acceleration, so 1 N = 1 kg m/s squared.' }
+          ]
+        },
+        {
+          id: 'phy111-t2', title: 'Motion and Kinematics',
+          desc: 'Displacement, velocity, acceleration and the equations of motion.',
+          mins: 10,
+          intro: 'Kinematics describes motion without asking what causes it. The key idea is that velocity and acceleration are rates of change.',
+          objectives: [
+            'Distinguish distance from displacement.',
+            'Calculate average speed and acceleration.',
+            'Apply the equations of uniformly accelerated motion.'
+          ],
+          sections: [
+            { h: 'Scalars and vectors', p: '**Distance** is a scalar — it has size only. **Displacement** is a vector — it has size and direction. A runner who completes a 400 m lap has travelled 400 m but has zero displacement.' },
+            { h: 'The equations of motion', p: 'For uniform acceleration: v = u + at, s = ut + half a t squared, and v squared = u squared + 2as.' }
+          ],
+          concepts: [
+            { t: 'Velocity', d: 'Rate of change of displacement, with direction.' },
+            { t: 'Acceleration', d: 'Rate of change of velocity, measured in m/s squared.' },
+            { t: 'Uniform motion', d: 'Motion with constant velocity, hence zero acceleration.' }
+          ],
+          examples: [
+            'A car accelerating from rest at 2 m/s squared for 5 s reaches v = 0 + 2(5) = 10 m/s.',
+            'A body thrown upward decelerates at about 9.8 m/s squared on Earth.'
+          ],
+          quiz: [
+            { q: 'Which quantity is a vector?', o: ['Distance','Speed','Displacement','Time'], a: 2, e: 'Displacement has both magnitude and direction, so it is a vector.' },
+            { q: 'A car goes from 0 to 20 m/s in 4 s. Its acceleration is…', o: ['5 m/s squared','4 m/s squared','80 m/s squared','0.2 m/s squared'], a: 0, e: 'a = (v - u)/t = (20 - 0)/4 = 5 m/s squared.' },
+            { q: 'A runner completing one full lap has…', o: ['Zero displacement','Zero distance','Zero speed','Infinite velocity'], a: 0, e: 'Returning to the starting point makes the displacement zero.' }
+          ]
+        },
+        {
+          id: 'phy111-t3', title: 'Work, Energy and Power',
+          desc: 'Energy transfer, conservation and the meaning of power.',
+          mins: 9,
+          intro: 'Energy is the capacity to do work, and it is never created or destroyed — only transferred between forms. Power tells you how quickly that transfer happens.',
+          objectives: [
+            'Calculate work done by a force.',
+            'State the principle of conservation of energy.',
+            'Distinguish power from energy.'
+          ],
+          sections: [
+            { h: 'Work', p: 'Work is done when a force moves an object in the direction of the force: **W = F times d times cos(theta)**. If the force is perpendicular to the motion, no work is done.' },
+            { h: 'Power', p: 'Power is the rate of doing work: **P = W / t**. Two machines may lift the same load to the same height, doing identical work, but the more powerful one does it in less time.' }
+          ],
+          concepts: [
+            { t: 'Joule', d: 'The SI unit of work and energy, equal to one newton-metre.' },
+            { t: 'Kinetic energy', d: 'Energy of motion, given by half m v squared.' },
+            { t: 'Watt', d: 'The SI unit of power, equal to one joule per second.' }
+          ],
+          examples: [
+            'Lifting a 10 kg bag 2 m does W = 10 times 9.8 times 2, about 196 J.',
+            'A 100 W bulb uses 100 J of energy every second.'
+          ],
+          quiz: [
+            { q: 'Work is measured in…', o: ['Watts','Newtons','Joules','Pascals'], a: 2, e: 'Work and energy are measured in joules.' },
+            { q: 'A machine does 600 J of work in 3 s. Its power is…', o: ['200 W','1800 W','300 W','20 W'], a: 0, e: 'P = W/t = 600/3 = 200 W.' },
+            { q: 'Carrying a bag horizontally at constant speed does how much work against gravity?', o: ['Maximum','Zero','Equal to weight','Half the weight'], a: 1, e: 'The force is vertical while motion is horizontal, so cos(theta) = 0 and no work is done against gravity.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'chm111', code: 'CHM 111', title: 'Chemistry',
+      subtitle: 'Atomic Structure, Bonding and the Mole', icon: 'flask-conical', color: '#F5B94C',
+      topics: [
+        {
+          id: 'chm111-t1', title: 'Atomic Structure',
+          desc: 'Protons, neutrons, electrons and electron configuration.',
+          mins: 9,
+          intro: 'The atom is the smallest unit of an element that keeps its chemical identity. Its structure explains almost everything else in chemistry.',
+          objectives: [
+            'Describe the three subatomic particles.',
+            'Determine atomic number and mass number.',
+            'Write electron configurations for the first 20 elements.'
+          ],
+          sections: [
+            { h: 'Subatomic particles', p: 'A **proton** has a positive charge and defines the element. A **neutron** is neutral and adds mass. An **electron** carries a negative charge and occupies shells around the nucleus.' },
+            { h: 'Electron shells', p: 'Electrons fill shells in order: 2, 8, 8, 18. The outermost shell determines chemical behaviour. Atoms with full outer shells are stable and unreactive.' }
+          ],
+          concepts: [
+            { t: 'Atomic number', d: 'The number of protons in an atom, which identifies the element.' },
+            { t: 'Mass number', d: 'Protons plus neutrons in the nucleus.' },
+            { t: 'Isotope', d: 'An atom with the same protons but a different number of neutrons.' }
+          ],
+          examples: [
+            'Carbon-12 has 6 protons and 6 neutrons; carbon-14 has 6 protons and 8 neutrons.',
+            'Sodium (atomic number 11) has the configuration 2, 8, 1.'
+          ],
+          quiz: [
+            { q: 'The atomic number equals the number of…', o: ['Neutrons','Protons','Electrons plus neutrons','Shells'], a: 1, e: 'Atomic number is the proton count, which defines the element.' },
+            { q: 'Isotopes of an element differ in…', o: ['Proton number','Electron number','Neutron number','Charge always'], a: 2, e: 'Isotopes share the same protons but differ in neutrons.' },
+            { q: 'The electron configuration of chlorine (17) is…', o: ['2, 8, 7','2, 8, 8','2, 7, 8','8, 8, 1'], a: 0, e: 'Shells fill 2 then 8 then 7, giving 2, 8, 7.' }
+          ]
+        },
+        {
+          id: 'chm111-t2', title: 'Chemical Bonding',
+          desc: 'Ionic, covalent and metallic bonds.',
+          mins: 9,
+          intro: 'Atoms bond to achieve a stable electron arrangement. The type of bond formed determines the properties of the substance.',
+          objectives: [
+            'Explain electron transfer in ionic bonding.',
+            'Describe electron sharing in covalent bonding.',
+            'Relate bond type to physical properties.'
+          ],
+          sections: [
+            { h: 'Ionic bonding', p: 'A metal transfers electrons to a non-metal, creating positive and negative ions held together by electrostatic attraction. Ionic compounds have high melting points and conduct electricity when molten or dissolved.' },
+            { h: 'Covalent bonding', p: 'Two non-metals share electron pairs. Simple molecular substances have low melting points, while giant covalent structures such as diamond are extremely hard.' }
+          ],
+          concepts: [
+            { t: 'Ion', d: 'A charged particle formed when an atom gains or loses electrons.' },
+            { t: 'Covalent bond', d: 'A bond formed by the sharing of an electron pair.' },
+            { t: 'Electrostatic attraction', d: 'The force between oppositely charged particles.' }
+          ],
+          examples: [
+            'NaCl: sodium loses one electron to chlorine, forming Na+ and Cl-.',
+            'Water forms through covalent sharing between oxygen and hydrogen.'
+          ],
+          quiz: [
+            { q: 'Ionic bonding involves…', o: ['Sharing electrons','Transfer of electrons','Sharing protons','Transfer of neutrons'], a: 1, e: 'Ionic bonds form when electrons are transferred from metal to non-metal.' },
+            { q: 'Ionic compounds conduct electricity when…', o: ['Solid','Molten or dissolved','Frozen','Always'], a: 1, e: 'Ions must be free to move, which happens when molten or in solution.' },
+            { q: 'A covalent bond forms between…', o: ['A metal and a non-metal','Two non-metals','Two metals','An ion and an electron'], a: 1, e: 'Covalent bonds typically form between non-metals sharing electron pairs.' }
+          ]
+        },
+        {
+          id: 'chm111-t3', title: 'The Mole Concept',
+          desc: 'Counting particles and calculating reacting masses.',
+          mins: 10,
+          intro: 'The mole lets chemists count atoms by weighing them. One mole contains 6.02 times 10 to the 23 particles — Avogadro’s number.',
+          objectives: [
+            'Define the mole and Avogadro’s number.',
+            'Convert between mass, moles and particles.',
+            'Use mole ratios in a balanced equation.'
+          ],
+          sections: [
+            { h: 'Mass, moles and molar mass', p: 'The number of moles is mass divided by molar mass: **n = m / M**. The molar mass of a substance in g/mol is numerically equal to its relative molecular mass.' },
+            { h: 'Mole ratios', p: 'A balanced equation gives the ratio in which substances react. In 2H2 + O2 to 2H2O, two moles of hydrogen react with one mole of oxygen.' }
+          ],
+          concepts: [
+            { t: 'Mole', d: 'The amount of substance containing 6.02 times 10 to the 23 particles.' },
+            { t: 'Molar mass', d: 'The mass of one mole of a substance, in g/mol.' },
+            { t: 'Avogadro’s number', d: '6.02 times 10 to the 23, the number of particles in one mole.' }
+          ],
+          examples: [
+            '18 g of water is 1 mole, since the molar mass of water is 18 g/mol.',
+            '4 g of helium is 1 mole, since the molar mass of helium is 4 g/mol.'
+          ],
+          quiz: [
+            { q: 'One mole contains how many particles?', o: ['6.02 times 10 to the 23','3.14 times 10 to the 23','6.02 times 10 to the 22','1.00 times 10 to the 23'], a: 0, e: 'Avogadro’s number is 6.02 times 10 to the 23 particles per mole.' },
+            { q: 'The number of moles in 36 g of water (molar mass 18) is…', o: ['1','2','0.5','18'], a: 1, e: 'n = m/M = 36/18 = 2 moles.' },
+            { q: 'In 2H2 + O2 to 2H2O, 4 moles of H2 need how many moles of O2?', o: ['1','2','4','8'], a: 1, e: 'The ratio is 2 : 1, so 4 moles of H2 require 2 moles of O2.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'bio111', code: 'BIO 111', title: 'Biology',
+      subtitle: 'Cells, Genetics and Ecology', icon: 'leaf', color: '#9B72FF',
+      topics: [
+        {
+          id: 'bio111-t1', title: 'Cell Biology',
+          desc: 'Cell structure, organelles and transport across membranes.',
+          mins: 9,
+          intro: 'The cell is the basic unit of life. Every living thing is either a single cell or a community of cells working together.',
+          objectives: [
+            'Compare plant and animal cells.',
+            'State the function of key organelles.',
+            'Explain diffusion, osmosis and active transport.'
+          ],
+          sections: [
+            { h: 'Organelles and their jobs', p: 'The **nucleus** stores DNA and controls activity. **Mitochondria** release energy through respiration. **Ribosomes** build proteins. **Chloroplasts**, found only in plant cells, carry out photosynthesis.' },
+            { h: 'Transport across membranes', p: '**Diffusion** moves particles from high to low concentration and needs no energy. **Osmosis** is the diffusion of water across a partially permeable membrane. **Active transport** moves substances against a concentration gradient.' }
+          ],
+          concepts: [
+            { t: 'Osmosis', d: 'The movement of water across a partially permeable membrane from a dilute to a concentrated solution.' },
+            { t: 'Mitochondrion', d: 'The organelle where aerobic respiration releases energy.' },
+            { t: 'Cell wall', d: 'A rigid cellulose layer outside the plant cell membrane.' }
+          ],
+          examples: [
+            'A plant wilts when water leaves its cells by osmosis.',
+            'Root hair cells use active transport to absorb mineral ions from dilute soil solutions.'
+          ],
+          quiz: [
+            { q: 'Which structure is found in plant cells but not animal cells?', o: ['Nucleus','Chloroplast','Mitochondrion','Ribosome'], a: 1, e: 'Chloroplasts are the site of photosynthesis and occur only in plant cells.' },
+            { q: 'Osmosis specifically involves the movement of…', o: ['Salt','Water','Protein','Oxygen'], a: 1, e: 'Osmosis is the movement of water across a partially permeable membrane.' },
+            { q: 'Active transport differs from diffusion because it…', o: ['Needs no energy','Requires energy','Only moves water','Only occurs in plants'], a: 1, e: 'Active transport moves substances against a gradient and needs energy from respiration.' }
+          ]
+        },
+        {
+          id: 'bio111-t2', title: 'Genetics',
+          desc: 'DNA, genes, inheritance and variation.',
+          mins: 10,
+          intro: 'Genetics explains why offspring resemble their parents without being identical to them. The answer lies in DNA, the molecule that carries the instructions for building an organism.',
+          objectives: [
+            'Describe the relationship between DNA, genes and chromosomes.',
+            'Use a Punnett square to predict offspring ratios.',
+            'Distinguish genotype from phenotype.'
+          ],
+          sections: [
+            { h: 'From DNA to traits', p: '**DNA** is a double helix of bases A, T, C and G. A **gene** is a section of DNA coding for a protein. Genes are packaged into **chromosomes**, and humans have 23 pairs.' },
+            { h: 'Dominant and recessive alleles', p: 'A dominant allele is expressed even when only one copy is present; a recessive allele is expressed only when both copies are recessive. A cross between two heterozygotes gives a 3 : 1 phenotypic ratio.' }
+          ],
+          concepts: [
+            { t: 'Genotype', d: 'The genetic makeup of an organism, e.g. Aa.' },
+            { t: 'Phenotype', d: 'The observable characteristic produced by the genotype.' },
+            { t: 'Allele', d: 'One of the alternative forms of a gene.' }
+          ],
+          examples: [
+            'Aa crossed with Aa produces offspring in the ratio 1 AA : 2 Aa : 1 aa.',
+            'Two brown-eyed heterozygous parents can have a blue-eyed child.'
+          ],
+          quiz: [
+            { q: 'A section of DNA that codes for a protein is a…', o: ['Chromosome','Gene','Nucleotide','Allele'], a: 1, e: 'A gene is a segment of DNA coding for a protein or trait.' },
+            { q: 'The cross Aa with Aa gives a phenotypic ratio of…', o: ['1 : 1','3 : 1','9 : 3 : 3 : 1','2 : 1'], a: 1, e: 'Three dominant phenotypes to one recessive phenotype.' },
+            { q: 'An organism’s observable characteristics form its…', o: ['Genotype','Phenotype','Karyotype','Allele'], a: 1, e: 'Phenotype refers to observable traits, produced by genotype and environment.' }
+          ]
+        },
+        {
+          id: 'bio111-t3', title: 'Ecology',
+          desc: 'Ecosystems, food chains and energy flow.',
+          mins: 8,
+          intro: 'Ecology studies how organisms interact with each other and with their environment. The central idea is that energy enters an ecosystem as sunlight and flows through feeding relationships.',
+          objectives: [
+            'Define ecosystem, habitat and niche.',
+            'Construct and interpret a food chain.',
+            'Explain why energy is lost between trophic levels.'
+          ],
+          sections: [
+            { h: 'Levels of organisation', p: 'An **organism** belongs to a **population** of the same species, which lives in a **community** of different species, which together with the physical environment forms an **ecosystem**.' },
+            { h: 'Energy flow', p: 'Only about 10% of energy passes from one trophic level to the next. The rest is lost as heat through respiration, or locked in waste and uneaten parts.' }
+          ],
+          concepts: [
+            { t: 'Producer', d: 'An organism that makes its own food, usually by photosynthesis.' },
+            { t: 'Trophic level', d: 'A feeding position in a food chain.' },
+            { t: 'Decomposer', d: 'An organism that breaks down dead matter and recycles nutrients.' }
+          ],
+          examples: [
+            'Grass, grasshopper, lizard, hawk is a four-level food chain.',
+            'Removing a top predator can cause prey populations to rise sharply, unbalancing the ecosystem.'
+          ],
+          quiz: [
+            { q: 'Energy is lost between trophic levels mainly as…', o: ['Water','Heat from respiration','Sunlight','Carbon dioxide'], a: 1, e: 'Most energy is lost as heat during respiration at each level.' },
+            { q: 'An organism’s role in its ecosystem is its…', o: ['Habitat','Niche','Population','Biome'], a: 1, e: 'The niche describes the role and position of an organism in its community.' },
+            { q: 'Approximately what percentage of energy transfers to the next trophic level?', o: ['1%','10%','50%','90%'], a: 1, e: 'Roughly 10% of energy is transferred; the rest is lost.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'ict107', code: 'ICT 107', title: 'Intro to Information Technology',
+      subtitle: 'Computer Fundamentals, Hardware and Networks', icon: 'monitor', color: '#FF647C',
+      topics: [
+        {
+          id: 'ict107-t1', title: 'Computer Fundamentals',
+          desc: 'Input, processing, storage and output.',
+          mins: 8,
+          intro: 'A computer is an electronic device that accepts data, processes it according to instructions, stores the result and outputs information.',
+          objectives: [
+            'Describe the four stages of the information processing cycle.',
+            'Distinguish data from information.',
+            'Identify common input and output devices.'
+          ],
+          sections: [
+            { h: 'The information processing cycle', p: 'Every computer follows the same loop: **input** (data entered by keyboard, sensor or file), **processing** (the CPU executes instructions), **storage** (data held in memory or on disk) and **output** (results shown or printed).' },
+            { h: 'Data versus information', p: '**Data** is raw and unprocessed — a list of numbers. **Information** is data that has been organised and given meaning. A spreadsheet of scores is data; a class average is information.' }
+          ],
+          concepts: [
+            { t: 'CPU', d: 'The central processing unit that executes program instructions.' },
+            { t: 'RAM', d: 'Volatile working memory that loses its contents when power is off.' },
+            { t: 'Peripheral', d: 'Any device connected to the computer for input, output or storage.' }
+          ],
+          examples: [
+            'A keyboard is an input device; a monitor is an output device.',
+            'The average temperature computed from hourly readings is information.'
+          ],
+          quiz: [
+            { q: 'Which stage comes immediately after input?', o: ['Output','Processing','Storage','Transmission'], a: 1, e: 'Data is processed next, then stored and output.' },
+            { q: 'RAM is described as volatile because it…', o: ['Is very fast','Loses data when power is off','Is read-only','Stores permanently'], a: 1, e: 'Volatile memory loses its contents when power is removed.' },
+            { q: 'Processed and organised data is called…', o: ['Raw data','Information','Metadata','Code'], a: 1, e: 'Information is data that has been processed and given meaning.' }
+          ]
+        },
+        {
+          id: 'ict107-t2', title: 'Hardware and Software',
+          desc: 'System software, application software and how they interact.',
+          mins: 9,
+          intro: 'Hardware is what you can touch; software is the set of instructions that makes the hardware useful. Neither is very useful alone.',
+          objectives: [
+            'Classify components as hardware or software.',
+            'Distinguish system software from application software.',
+            'Explain the role of the operating system.'
+          ],
+          sections: [
+            { h: 'System software', p: 'System software manages the computer itself. The **operating system** — Windows, Linux, Android, macOS — schedules tasks, manages memory, controls devices and provides a platform on which other programs run.' },
+            { h: 'Application software', p: 'Application software performs tasks for the user: word processors, browsers, spreadsheets, games and learning apps. Applications depend on the operating system to access hardware.' }
+          ],
+          concepts: [
+            { t: 'Operating system', d: 'The master program that manages hardware and provides services to applications.' },
+            { t: 'Driver', d: 'Software that lets the operating system communicate with a specific device.' },
+            { t: 'Firmware', d: 'Software permanently stored on a device, such as the BIOS.' }
+          ],
+          examples: [
+            'Microsoft Word is application software; Windows is system software.',
+            'A printer driver translates a print job into instructions the printer understands.'
+          ],
+          quiz: [
+            { q: 'Which is system software?', o: ['Microsoft Word','Google Chrome','Android OS','Adobe Photoshop'], a: 2, e: 'An operating system such as Android is system software.' },
+            { q: 'The main job of an operating system is to…', o: ['Edit documents','Manage hardware and provide services','Browse the internet','Play videos'], a: 1, e: 'The OS manages hardware resources and provides a platform for applications.' },
+            { q: 'A driver allows the OS to…', o: ['Compile code','Communicate with a device','Encrypt files','Format a disk'], a: 1, e: 'Drivers translate commands for specific hardware devices.' }
+          ]
+        },
+        {
+          id: 'ict107-t3', title: 'Internet and Networks',
+          desc: 'How devices connect and how data travels.',
+          mins: 9,
+          intro: 'A network is two or more devices connected so they can share resources. The internet is the largest network of all.',
+          objectives: [
+            'Distinguish LAN from WAN.',
+            'Explain the role of IP addresses and DNS.',
+            'Identify basic online safety practices.'
+          ],
+          sections: [
+            { h: 'LAN, WAN and the internet', p: 'A **LAN** (local area network) covers a small area such as a room or campus. A **WAN** (wide area network) spans cities or countries. The internet is a global WAN that connects millions of smaller networks.' },
+            { h: 'Addressing and DNS', p: 'Every device on a network has an **IP address**. Because numbers are hard to remember, the **Domain Name System** translates names such as example.com into IP addresses.' }
+          ],
+          concepts: [
+            { t: 'Protocol', d: 'An agreed set of rules for communication between devices.' },
+            { t: 'Bandwidth', d: 'The amount of data a connection can carry per second.' },
+            { t: 'HTTPS', d: 'A secure, encrypted version of the HTTP protocol used by websites.' }
+          ],
+          examples: [
+            'A campus Wi-Fi network is a LAN; the internet it connects to is a WAN.',
+            'When you visit a site, DNS resolves its name to an IP address before your browser connects.'
+          ],
+          quiz: [
+            { q: 'A network covering one campus building is a…', o: ['WAN','LAN','PAN','VPN'], a: 1, e: 'A local area network (LAN) covers a small geographic area.' },
+            { q: 'DNS is responsible for…', o: ['Encrypting traffic','Translating domain names to IP addresses','Assigning bandwidth','Blocking malware'], a: 1, e: 'DNS resolves human-readable domain names into IP addresses.' },
+            { q: 'HTTPS differs from HTTP because it…', o: ['Is faster','Encrypts the connection','Works offline','Uses no IP addresses'], a: 1, e: 'HTTPS adds encryption, protecting data in transit.' }
+          ]
+        }
+      ]
+    }
+  ];
+
+  const DEFAULT_COURSE_ID = 'gst111';
+  const DEFAULT_TOPIC_ID = 'gst111-t1';
+
+  /* ==========================================================
+     JAVASCRIPT: LOCAL STORAGE
+     ========================================================== */
+  const STORAGE_KEY = 'nexalearn.progress.v2';
+
+  const defaultProgress = {
+    completed: {},
+    startedCourses: {},
+    quizzes: [],
+    lastTopicId: null,
+    theme: 'dark',
+    notifications: false,
+    name: 'Student',
+    email: 'student@nexalearn.app'
+  };
+
+  let progress = loadProgress();
+
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return Object.assign({}, defaultProgress);
+      const parsed = JSON.parse(raw);
+      return Object.assign({}, defaultProgress, parsed, {
+        completed: parsed.completed || {},
+        startedCourses: parsed.startedCourses || {},
+        quizzes: Array.isArray(parsed.quizzes) ? parsed.quizzes : []
+      });
+    } catch (e) {
+      return Object.assign({}, defaultProgress);
+    }
+  }
+
+  function saveProgress() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+    catch (e) {}
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: STATE + HELPERS
+     ========================================================== */
+  const state = {
+    stack: [],
+    currentScreen: 'welcome',
+    courseId: null,
+    topicId: null,
+    chatTopicId: null,
+    chatCourseId: null,
+    chat: [],
+    busy: false,
+    pendingQuestion: null,
+    quiz: null,
+    aiMode: 'simulated'  // 'live' | 'simulated'
+  };
+
+  function getCourse(courseId) { return COURSES.find(c => c.id === courseId) || null; }
+  function getTopic(courseId, topicId) {
+    const course = getCourse(courseId);
+    return course ? course.topics.find(t => t.id === topicId) || null : null;
+  }
+  function findTopicById(topicId) {
+    for (const c of COURSES) {
+      const t = c.topics.find(x => x.id === topicId);
+      if (t) return { course: c, topic: t };
+    }
+    return null;
+  }
+  function courseProgress(course) {
+    const total = course.topics.length;
+    const done = course.topics.filter(t => progress.completed[t.id]).length;
+    return { done, total, pct: total ? Math.round((done / total) * 100) : 0 };
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: VIEWPORT SYNC (mobile keyboard)
+     ========================================================== */
+  function syncViewport() {
+    const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+    document.documentElement.style.setProperty('--app-vh', Math.round(h) + 'px');
+  }
+  function scrollChatToBottom() {
+    const chat = $('#chat');
+    if (chat) chat.scrollTop = chat.scrollHeight;
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: NAVIGATION
+     ========================================================== */
+  const TABBAR_SCREENS = ['home', 'learn', 'practice', 'profile'];
+
+  function showScreen(name) {
+    $$('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-' + name);
+    if (target) target.classList.add('active');
+    state.currentScreen = name;
+
+    const tabbar = $('#tabbar');
+    if (TABBAR_SCREENS.indexOf(name) !== -1) {
+      tabbar.classList.remove('is-hidden');
+      document.body.classList.remove('no-tabbar');
+    } else {
+      tabbar.classList.add('is-hidden');
+      document.body.classList.add('no-tabbar');
+    }
+
+    $$('.tab').forEach(t => t.classList.toggle('is-active', t.dataset.nav === name));
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    refreshIcons();
+  }
+
+  function navigate(name, opts) {
+    const options = opts || {};
+    if (options.push !== false && state.currentScreen !== name) {
+      state.stack.push(state.currentScreen);
+    }
+    if (name === 'home') renderHome();
+    if (name === 'learn') renderLearn(($('#course-search') && $('#course-search').value) || '');
+    if (name === 'practice') {
+      renderPracticePicker();
+      if (!options.preserveQuiz) showPracticePicker();
+    }
+    if (name === 'profile') renderProfile();
+    if (name === 'settings') renderSettings();
+    showScreen(name);
+  }
+
+  function goBack() {
+    const prev = state.stack.pop();
+    navigate(prev || 'home', { push: false });
+  }
+
+  function handleNav(dest) {
+    if (TABBAR_SCREENS.indexOf(dest) !== -1) {
+      state.stack = [];
+      navigate(dest, { push: false });
+    }
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: AI STATUS
+     ========================================================== */
+  function setAIStatus(mode) {
+    state.aiMode = mode;
+    const el = $('#ai-status');
+    if (el) {
+      el.classList.remove('ai-status--live', 'ai-status--simulated', 'ai-status--error');
+      const label = el.querySelector('.ai-status__label');
+      if (mode === 'live') {
+        el.classList.add('ai-status--live');
+        if (label) label.textContent = 'Live';
+      } else if (mode === 'error') {
+        el.classList.add('ai-status--error');
+        if (label) label.textContent = 'Offline';
+      } else {
+        el.classList.add('ai-status--simulated');
+        if (label) label.textContent = 'Simulated';
+      }
+    }
+    updateSettingsAIStatus(mode);
+  }
+
+  function updateSettingsAIStatus(mode) {
+    const badge = $('#settings-ai-badge');
+    const text = $('#settings-ai-status');
+    const hint = $('#ai-config-hint');
+    if (badge) {
+      badge.classList.remove('ai-status--live', 'ai-status--simulated', 'ai-status--error');
+      const label = badge.querySelector('.ai-status__label');
+      if (mode === 'live') {
+        badge.classList.add('ai-status--live');
+        if (label) label.textContent = 'Live';
+      } else if (mode === 'error') {
+        badge.classList.add('ai-status--error');
+        if (label) label.textContent = 'Offline';
+      } else {
+        badge.classList.add('ai-status--simulated');
+        if (label) label.textContent = 'Simulated';
+      }
+    }
+    if (text) {
+      text.textContent = mode === 'live'
+        ? 'Connected — replies come from Groq.'
+        : mode === 'error'
+          ? 'Connection failed — using offline tutor.'
+          : 'Offline tutor — no API connection.';
+    }
+    if (hint) {
+      hint.textContent = mode === 'live' ? 'Live · Groq' : 'Simulated mode';
+    }
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: HOME
+     ========================================================== */
+  function renderHome() {
+    renderContinueCard();
+    renderHomeCourses();
+    updateProfileDisplay();
+    refreshIcons();
+  }
+
+  function renderContinueCard() {
+    const host = $('#continue-card');
+    if (!host) return;
+    let entry = progress.lastTopicId ? findTopicById(progress.lastTopicId) : null;
+    if (!entry) entry = { course: getCourse(DEFAULT_COURSE_ID), topic: getTopic(DEFAULT_COURSE_ID, DEFAULT_TOPIC_ID) };
+    const course = entry.course, topic = entry.topic;
+    if (!course || !topic) { host.innerHTML = ''; return; }
+    const p = courseProgress(course);
+
+    host.innerHTML =
+      '<div class="continue">' +
+        '<span class="continue__label">Continue Learning</span>' +
+        '<div class="continue__code">' + esc(course.code) + '</div>' +
+        '<div class="continue__title">' + esc(course.title) + '</div>' +
+        '<div class="continue__topic">' + esc(topic.title) + ' · Continue where you left off.</div>' +
+        '<div class="continue__bar">' +
+          '<div class="bar"><div class="bar__fill" style="width:' + p.pct + '%"></div></div>' +
+          '<div class="continue__meta"><span>' + p.done + ' of ' + p.total + ' topics</span><span>' + p.pct + '%</span></div>' +
+        '</div>' +
+        '<button class="btn btn--primary" data-action="continue-learning" data-course="' + course.id + '" data-topic="' + topic.id + '">Continue Learning</button>' +
+      '</div>';
+  }
+
+  function renderHomeCourses() {
+    const host = $('#home-courses');
+    if (!host) return;
+    host.innerHTML = COURSES.map(function (c) {
+      const p = courseProgress(c);
+      return '<button class="course-card" data-course="' + c.id + '">' +
+        '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
+        '<span class="course-card__body">' +
+          '<span class="course-card__code">' + esc(c.code) + '</span>' +
+          '<span class="course-card__title">' + esc(c.title) + '</span>' +
+          '<span class="course-card__code" style="color:var(--muted)">' + p.done + '/' + p.total + ' topics</span>' +
+        '</span>' +
+      '</button>';
+    }).join('');
+    refreshIcons();
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: LEARN
+     ========================================================== */
+  function renderLearn(query) {
+    const q = String(query || '').trim().toLowerCase();
+    const host = $('#learn-courses');
+    const empty = $('#learn-empty');
+    if (!host) return;
+
+    const matches = COURSES.filter(function (c) {
+      if (!q) return true;
+      if (c.code.toLowerCase().indexOf(q) !== -1) return true;
+      if (c.title.toLowerCase().indexOf(q) !== -1) return true;
+      if (c.subtitle.toLowerCase().indexOf(q) !== -1) return true;
+      return c.topics.some(t => t.title.toLowerCase().indexOf(q) !== -1 || t.desc.toLowerCase().indexOf(q) !== -1);
+    });
+
+    if (!matches.length) {
+      host.innerHTML = '';
+      if (empty) empty.classList.remove('hidden');
+      refreshIcons();
+      return;
+    }
+    if (empty) empty.classList.add('hidden');
+
+    host.innerHTML = matches.map(function (c) {
+      const p = courseProgress(c);
+      return '<button class="course-row" data-course="' + c.id + '">' +
+        '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
+        '<span class="course-row__body">' +
+          '<span class="course-row__code">' + esc(c.code) + '</span>' +
+          '<span class="course-row__title">' + esc(c.title) + '</span>' +
+          '<span class="course-row__meta">' + c.topics.length + ' topics · ' + p.done + ' completed</span>' +
+        '</span>' +
+        '<i data-lucide="chevron-right"></i>' +
+      '</button>';
+    }).join('');
+    refreshIcons();
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: COURSE DETAIL
+     ========================================================== */
+  function openCourse(courseId) {
+    const course = getCourse(courseId);
+    if (!course) return;
+    state.courseId = courseId;
+    state.topicId = null;
+    progress.startedCourses[courseId] = true;
+    saveProgress();
+    renderCoursePage(course);
+    navigate('course');
+  }
+
+  function renderCoursePage(course) {
+    const p = courseProgress(course);
+    const topicsHtml = course.topics.map(function (t, i) {
+      const done = !!progress.completed[t.id];
+      return '<button class="topic-row' + (done ? ' is-done' : '') + '" data-topic="' + t.id + '" data-course="' + course.id + '">' +
+        '<span class="topic-row__num">' + (done ? '<i data-lucide="check"></i>' : (i + 1)) + '</span>' +
+        '<span class="topic-row__body">' +
+          '<span class="topic-row__title">' + esc(t.title) + '</span>' +
+          '<span class="topic-row__desc">' + esc(t.desc) + '</span>' +
+        '</span>' +
+        '<span class="topic-row__right"><i data-lucide="chevron-right"></i></span>' +
+      '</button>';
+    }).join('');
+
+    const page = $('#course-page');
+    if (!page) return;
+    page.innerHTML =
+      '<div class="course-hero">' +
+        '<div class="course-hero__top">' +
+          '<span class="course-icon" style="--ic:' + course.color + '"><i data-lucide="' + course.icon + '"></i></span>' +
+          '<span class="pill pill--soft">' + esc(course.code) + '</span>' +
+        '</div>' +
+        '<h1>' + esc(course.title) + '</h1>' +
+        '<p>' + esc(course.subtitle) + '</p>' +
+        '<div class="course-hero__bar">' +
+          '<div class="bar"><div class="bar__fill" style="width:' + p.pct + '%"></div></div>' +
+          '<div class="continue__meta"><span>' + p.done + ' of ' + p.total + ' topics completed</span><span>' + p.pct + '%</span></div>' +
+        '</div>' +
+      '</div>' +
+      '<h2 class="section-title">Topics</h2>' +
+      '<div class="topic-list">' + topicsHtml + '</div>';
+    refreshIcons();
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: LESSON
+     ========================================================== */
+  function openLesson(courseId, topicId) {
+    const course = getCourse(courseId);
+    const topic = getTopic(courseId, topicId);
+    if (!course || !topic) return;
+    state.courseId = courseId;
+    state.topicId = topicId;
+    progress.startedCourses[courseId] = true;
+    progress.lastTopicId = topicId;
+    saveProgress();
+    renderLesson(course, topic);
+    navigate('lesson');
+  }
+
+  function renderLesson(course, topic) {
+    const index = course.topics.indexOf(topic) + 1;
+    const done = !!progress.completed[topic.id];
+
+    const objectivesHtml = topic.objectives.map(o => '<li>' + esc(o) + '</li>').join('');
+    const sectionsHtml = topic.sections.map(s =>
+      '<div class="lesson-card" style="margin-top:10px">' +
+        '<p><strong>' + esc(s.h) + '</strong></p>' +
+        '<p>' + richText(s.p) + '</p>' +
+      '</div>'
+    ).join('');
+    const conceptsHtml = topic.concepts.map(c =>
+      '<div class="concept"><dt>' + esc(c.t) + '</dt><dd>' + esc(c.d) + '</dd></div>'
+    ).join('');
+    const examplesHtml = topic.examples.map(e =>
+      '<div class="example"><i data-lucide="lightbulb"></i><span>' + esc(e) + '</span></div>'
+    ).join('');
+
+    const page = $('#lesson-page');
+    if (!page) return;
+    page.innerHTML =
+      '<div class="lesson-head">' +
+        '<div class="lesson-chip">' +
+          '<span class="pill">' + esc(course.code) + '</span>' +
+          '<span class="pill">Lesson ' + index + ' of ' + course.topics.length + '</span>' +
+          (done ? '<span class="pill pill--success">Completed</span>' : '') +
+        '</div>' +
+        '<h1 class="lesson-title">' + esc(topic.title) + '</h1>' +
+        '<p class="lesson-sub">' + esc(topic.mins) + ' min read · ' + esc(course.title) + '</p>' +
+      '</div>' +
+      '<div class="lesson-section">' +
+        '<h3><i data-lucide="book-open"></i>Introduction</h3>' +
+        '<div class="lesson-card"><p>' + esc(topic.intro) + '</p></div>' +
+      '</div>' +
+      '<div class="lesson-section">' +
+        '<h3><i data-lucide="target"></i>Learning objectives</h3>' +
+        '<div class="lesson-card"><ul class="obj-list">' + objectivesHtml + '</ul></div>' +
+      '</div>' +
+      '<div class="lesson-section">' +
+        '<h3><i data-lucide="layers"></i>Lesson explanation</h3>' +
+        sectionsHtml +
+      '</div>' +
+      '<div class="lesson-section">' +
+        '<h3><i data-lucide="key-round"></i>Key concepts</h3>' +
+        '<div class="lesson-card"><dl>' + conceptsHtml + '</dl></div>' +
+      '</div>' +
+      '<div class="lesson-section">' +
+        '<h3><i data-lucide="lightbulb"></i>Practical examples</h3>' +
+        examplesHtml +
+      '</div>' +
+      '<div class="lesson-actions">' +
+        '<button class="btn btn--primary" data-action="ask-tutor" data-course="' + course.id + '" data-topic="' + topic.id + '">' +
+          '<i data-lucide="message-circle"></i> Ask AI Tutor</button>' +
+        '<button class="btn btn--soft" data-action="take-quiz" data-course="' + course.id + '" data-topic="' + topic.id + '">' +
+          '<i data-lucide="brain"></i> Take Practice Quiz</button>' +
+        (done ? '' : '<button class="link-btn" data-action="complete-lesson" data-course="' + course.id + '" data-topic="' + topic.id + '"><i data-lucide="check"></i>Mark lesson as complete</button>') +
+      '</div>';
+    refreshIcons();
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: AI CLASSROOM
+     ========================================================== */
+  function openClassroom(courseId, topicId) {
+    const course = getCourse(courseId) || getCourse(DEFAULT_COURSE_ID);
+    const topic = getTopic(course.id, topicId) || course.topics[0];
+    if (!course || !topic) return;
+
+    state.chatCourseId = course.id;
+    state.chatTopicId = topic.id;
+    state.chat = [];
+    state.busy = false;
+    state.pendingQuestion = null;
+
+    progress.startedCourses[course.id] = true;
+    progress.lastTopicId = topic.id;
+    saveProgress();
+
+    const ctx = $('#class-context');
+    if (ctx) ctx.textContent = course.code + ' • ' + topic.title;
+
+    const welcome =
+      "Hello! Welcome to your lesson.\n\n" +
+      "Today we'll explore **" + topic.title + "**.\n\n" +
+      "I'll explain each concept step by step, give you practical examples, and check your understanding as we go.\n\n" +
+      "You can ask me to explain anything differently whenever you need.";
+
+    state.chat.push({ role: 'ai', text: welcome });
+    renderChat();
+    navigate('classroom');
+  }
+
+  function renderChat() {
+    const host = $('#chat');
+    if (!host) return;
+    host.innerHTML = state.chat.map(function (m) {
+      if (m.role === 'ai') {
+        return '<div class="msg msg--ai">' +
+          '<span class="msg__avatar"><i data-lucide="sparkles"></i></span>' +
+          '<div class="msg__bubble' + (m.error ? ' is-error' : '') + '">' + richText(m.text) + '</div>' +
+        '</div>';
+      }
+      return '<div class="msg msg--user"><div class="msg__bubble">' + richText(m.text) + '</div></div>';
+    }).join('');
+
+    if (state.busy) {
+      host.innerHTML += '<div class="msg msg--ai" id="typing-msg">' +
+        '<span class="msg__avatar"><i data-lucide="sparkles"></i></span>' +
+        '<div class="msg__bubble"><div class="typing"><span></span><span></span><span></span></div></div>' +
+      '</div>';
+    }
+    scrollChatToBottom();
+    refreshIcons();
+  }
+
+  function detectIntent(text) {
+    const t = String(text).toLowerCase();
+    if (/(test my|quiz me|quiz|assess|check my)/.test(t)) return 'quiz';
+    if (/(simpler|simple|easier|basic|less detail)/.test(t)) return 'simpler';
+    if (/(example|instance|illustrat|real life|real-world)/.test(t)) return 'example';
+    if (/(key point|summary|summarise|summarize|main point|takeaway)/.test(t)) return 'keypoints';
+    if (/(explain|what is|what are|define|meaning|how does|teach|tell me about)/.test(t)) return 'explain';
+    if (/^(hi|hello|hey|good (morning|afternoon|evening))\b/.test(t)) return 'greeting';
+    return 'default';
+  }
+
+  function parseAnswerLetter(text) {
+    const m = String(text).trim().match(/^([abcdABCD])\s*[.)\]:]?\s*$/);
+    return m ? m[1].toLowerCase() : null;
+  }
+
+  function evaluateAnswer(letter, question) {
+    const idx = 'abcd'.indexOf(letter);
+    const correctLetter = String.fromCharCode(65 + question.a);
+    const chosenLetter = letter.toUpperCase();
+    if (idx === question.a) {
+      return '**Correct!** Answer ' + correctLetter + ' is right.\n\n' +
+        question.e + '\n\n' +
+        'Say "Quiz me" if you\'d like another question.';
+    }
+    return '**Not quite.** You picked ' + chosenLetter + ', but the correct answer is **' +
+      correctLetter + '. ' + question.o[question.a] + '**.\n\n' +
+      question.e + '\n\n' +
+      'Review the lesson, then try again with "Quiz me".';
+  }
+
+  function buildQuizQuestion(topic) {
+    const q = topic.quiz[Math.floor(Math.random() * topic.quiz.length)];
+    state.pendingQuestion = q;
+    return '### Quick check\n' +
+      'Let\'s test your understanding of **' + topic.title + '**.\n\n' +
+      '**' + q.q + '**\n\n' +
+      q.o.map((o, i) => String.fromCharCode(65 + i) + '. ' + o).join('\n\n') + '\n\n' +
+      'Reply with A, B, C, or D.';
+  }
+
+  function buildDefaultReply(text, course, topic) {
+    const t = text.toLowerCase();
+    const topicWords = [];
+    topicWords.push(topic.title.toLowerCase());
+    topic.sections.forEach(s => {
+      s.h.split(/\s+/).forEach(w => { if (w.length > 3) topicWords.push(w.toLowerCase()); });
+    });
+    topic.concepts.forEach(c => {
+      c.t.toLowerCase().split(/\s+/).forEach(w => { if (w.length > 3) topicWords.push(w.toLowerCase()); });
+    });
+
+    const isOnTopic = topicWords.some(w => t.indexOf(w) !== -1) ||
+      t.indexOf(course.code.toLowerCase()) !== -1 ||
+      t.indexOf(course.title.toLowerCase()) !== -1;
+
+    if (isOnTopic) {
+      return 'Good question about **' + topic.title + '**.\n\n' +
+        'Here\'s how the lesson frames the key ideas:\n\n' +
+        topic.concepts.map(c => '- **' + c.t + '** — ' + c.d).join('\n') + '\n\n' +
+        'I can also:\n- Explain in simpler words\n- Give a concrete example\n- Summarise the key points\n- Quiz you';
+    }
+
+    return 'I\'m your tutor for **' + topic.title + '** (' + course.code + ') in this lesson.\n\n' +
+      'I can help best with this topic. For other subjects, open the matching course from Learn.\n\n' +
+      'Try one of these here:\n- "Explain this simply"\n- "Give me an example"\n- "What are the key points?"\n- "Quiz me"';
+  }
+
+  function buildReply(intent, text, course, topic) {
+    const first = topic.sections[0] || { h: 'Overview', p: topic.intro };
+    const second = topic.sections[1] || null;
+
+    switch (intent) {
+      case 'greeting':
+        return 'Hello! I\'m your NexaLearn tutor.\n\n' +
+          'We\'re working on **' + topic.title + '** from ' + course.code + '.\n\n' +
+          'You can ask me to:\n- Explain the topic simply\n- Give practical examples\n- Summarise the key points\n- Quiz you on what you\'ve learned';
+      case 'simpler':
+        return '### ' + topic.title + ' — in plain words\n' +
+          topic.intro + '\n\n' +
+          '**The short version**\n' + first.p.replace(/\*\*/g, '') + '\n\n' +
+          'If any part still feels heavy, tell me which word or sentence and I\'ll break it down further.';
+      case 'explain':
+        return '### ' + topic.title + '\n' + topic.intro + '\n\n' +
+          '**' + first.h + '**\n' + first.p + '\n\n' +
+          (second ? '**' + second.h + '**\n' + second.p + '\n\n' : '') +
+          '**What to remember**\n' + topic.objectives.map(o => '- ' + o).join('\n');
+      case 'example':
+        return '### Practical examples\n' +
+          'Here are examples that make **' + topic.title + '** concrete:\n\n' +
+          topic.examples.map(e => '- ' + e).join('\n') + '\n\n' +
+          '**Your turn**\nTry to create one example of your own. I\'ll check it for you.';
+      case 'keypoints':
+        return '### Key points — ' + topic.title + '\n' +
+          topic.concepts.map(c => '- **' + c.t + '** — ' + c.d).join('\n') + '\n\n' +
+          '**Objectives you should now meet**\n' + topic.objectives.map(o => '- ' + o).join('\n');
+      case 'quiz':
+        return buildQuizQuestion(topic);
+      default:
+        return buildDefaultReply(text, course, topic);
+    }
+  }
+
+  async function callGroq(userText, course, topic) {
+    try {
+      const history = state.chat
+        .filter(m => m.role === 'user' || m.role === 'ai')
+        .slice(-10)
+        .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history,
+          context: {
+            course: course.code + ' ' + course.title,
+            topic: topic.title,
+            intro: topic.intro,
+            concepts: topic.concepts.map(c => c.t + ': ' + c.d)
+          }
+        })
+      });
+
+      if (!res.ok) {
+        console.warn('[AI] request failed', res.status);
+        return null;
+      }
+      const data = await res.json();
+      return (data.reply || '').trim() || null;
+    } catch (err) {
+      console.warn('[AI] request error', err);
+      return null;
+    }
+  }
+
+  async function sendUserMessage(text) {
+    const clean = String(text || '').trim();
+    if (!clean) { showToast('Please type a message first.'); return; }
+    if (state.busy) return;
+
+    const course = getCourse(state.chatCourseId);
+    const topic = getTopic(state.chatCourseId, state.chatTopicId);
+    if (!course || !topic) return;
+
+    state.chat.push({ role: 'user', text: clean });
+    state.busy = true;
+    renderChat();
+
+    // 1) Quiz-answer shortcut
+    const answerLetter = parseAnswerLetter(clean);
+    if (answerLetter && state.pendingQuestion) {
+      const reply = evaluateAnswer(answerLetter, state.pendingQuestion);
+      state.pendingQuestion = null;
+      await delay(600);
+      state.chat.push({ role: 'ai', text: reply });
+      state.busy = false;
+      renderChat();
+      return;
+    }
+
+    // 2) "Quiz me" always uses the local quiz engine so answer evaluation works
+    const intent = detectIntent(clean);
+    if (intent === 'quiz') {
+      const reply = buildQuizQuestion(topic);
+      await delay(500);
+      state.chat.push({ role: 'ai', text: reply });
+      state.busy = false;
+      renderChat();
+      return;
+    }
+
+    // 3) Try live AI
+    const liveReply = await callGroq(clean, course, topic);
+    if (liveReply) {
+      setAIStatus('live');
+      state.chat.push({ role: 'ai', text: liveReply });
+      state.busy = false;
+      renderChat();
+      return;
+    }
+
+    // 4) Fall back to simulated tutor
+    setAIStatus('simulated');
+    const reply = buildReply(intent, clean, course, topic);
+    await delay(600);
+    state.chat.push({ role: 'ai', text: reply });
+    state.busy = false;
+    renderChat();
+  }
+
+  function handleComposerSubmit(e) {
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    const input = $('#chat-input');
+    if (!input) return;
+    const value = input.value;
+    if (!value.trim()) { showToast('Please type a message first.'); return; }
+    input.value = '';
+    input.style.height = 'auto';
+    sendUserMessage(value);
+  }
+
+  function autoGrow(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: PRACTICE + QUIZ
+     ========================================================== */
+  function renderPracticePicker() {
+    const host = $('#practice-list');
+    if (!host) return;
+    host.innerHTML = COURSES.map(function (c) {
+      const rows = c.topics.map(function (t) {
+        const done = !!progress.completed[t.id];
+        return '<button class="practice-topic" data-action="start-practice" data-course="' + c.id + '" data-topic="' + t.id + '">' +
+          '<span>' + esc(t.title) + '</span>' +
+          (done ? '<span class="pill pill--success" style="text-transform:none;letter-spacing:0">Done</span>' : '') +
+          '<span class="muted small" style="flex:0 0 auto">' + t.quiz.length + ' Qs</span>' +
+          '<i data-lucide="chevron-right"></i>' +
+        '</button>';
+      }).join('');
+      return '<div class="practice-group">' +
+        '<div class="practice-group__head">' +
+          '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
+          '<div><strong>' + esc(c.code) + '</strong><span class="muted">' + esc(c.title) + '</span></div>' +
+        '</div>' + rows +
+      '</div>';
+    }).join('');
+    refreshIcons();
+  }
+
+  function showPracticePicker() {
+    const picker = $('#practice-picker');
+    const quiz = $('#practice-quiz');
+    if (picker) picker.classList.remove('hidden');
+    if (quiz) quiz.classList.add('hidden');
+    state.quiz = null;
+  }
+
+  function startQuiz(courseId, topicId) {
+    const course = getCourse(courseId);
+    const topic = getTopic(courseId, topicId);
+    if (!course || !topic || !topic.quiz.length) {
+      showToast('No quiz available for this topic.');
+      return;
+    }
+    state.quiz = {
+      courseId: courseId,
+      topicId: topicId,
+      questions: topic.quiz,
+      index: 0,
+      selected: null,
+      answered: false,
+      correct: 0,
+      results: []
+    };
+    const picker = $('#practice-picker');
+    const quiz = $('#practice-quiz');
+    if (picker) picker.classList.add('hidden');
+    if (quiz) quiz.classList.remove('hidden');
+    navigate('practice', { push: false, preserveQuiz: true });
+    renderQuizQuestion();
+  }
+
+  function renderQuizQuestion() {
+    const q = state.quiz;
+    if (!q) return;
+    const course = getCourse(q.courseId);
+    const topic = getTopic(q.courseId, q.topicId);
+    const question = q.questions[q.index];
+    const total = q.questions.length;
+    const pct = Math.round((q.index / total) * 100);
+
+    const optionsHtml = question.o.map(function (opt, i) {
+      let cls = 'option';
+      if (q.answered) {
+        if (i === question.a) cls += ' is-correct';
+        else if (i === q.selected) cls += ' is-wrong';
+      } else if (i === q.selected) {
+        cls += ' is-selected';
+      }
+      return '<button class="' + cls + '" data-action="pick-option" data-index="' + i + '"' + (q.answered ? ' disabled' : '') + '>' +
+        '<span class="option__key">' + String.fromCharCode(65 + i) + '</span>' +
+        '<span>' + esc(opt) + '</span>' +
+      '</button>';
+    }).join('');
+
+    const feedbackHtml = q.answered
+      ? '<div class="feedback ' + (q.selected === question.a ? 'is-correct' : 'is-wrong') + '">' +
+          '<strong>' + (q.selected === question.a ? 'Correct!' : 'Not quite.') + '</strong>' +
+          esc(question.e) +
+        '</div>'
+      : '';
+
+    const actionHtml = q.answered
+      ? '<button class="btn btn--primary" data-action="next-question">' +
+          (q.index + 1 < total ? 'Next Question' : 'See Results') + '</button>'
+      : '<button class="btn btn--primary" data-action="submit-answer">Submit Answer</button>';
+
+    const quiz = $('#practice-quiz');
+    if (!quiz) return;
+    quiz.innerHTML =
+      '<div class="quiz-head">' +
+        '<button class="icon-btn icon-btn--sm" data-action="exit-quiz" aria-label="Exit quiz"><i data-lucide="arrow-left"></i></button>' +
+        '<h1>' + esc(course.code) + '</h1>' +
+        '<span class="quiz-count">Question ' + (q.index + 1) + ' of ' + total + '</span>' +
+      '</div>' +
+      '<div class="quiz-progress"><div class="bar"><div class="bar__fill" style="width:' + pct + '%"></div></div></div>' +
+      '<p class="quiz-topic">' + esc(topic.title) + '</p>' +
+      '<div class="question-card">' +
+        '<h2>' + esc(question.q) + '</h2>' +
+        '<div class="options">' + optionsHtml + '</div>' +
+        feedbackHtml +
+      '</div>' +
+      '<div class="quiz-actions">' + actionHtml +
+        '<button class="link-btn" data-action="exit-quiz"><i data-lucide="arrow-left"></i>Back to practice list</button>' +
+      '</div>';
+    refreshIcons();
+  }
+
+  function pickOption(index) {
+    const q = state.quiz;
+    if (!q || q.answered) return;
+    q.selected = index;
+    renderQuizQuestion();
+  }
+
+  function submitAnswer() {
+    const q = state.quiz;
+    if (!q) return;
+    if (q.selected === null) { showToast('Please select an answer first.'); return; }
+    q.answered = true;
+    const question = q.questions[q.index];
+    if (q.selected === question.a) q.correct += 1;
+    q.results.push({ index: q.index, correct: q.selected === question.a });
+    renderQuizQuestion();
+  }
+
+  function nextQuestion() {
+    const q = state.quiz;
+    if (!q) return;
+    if (q.index + 1 < q.questions.length) {
+      q.index += 1;
+      q.selected = null;
+      q.answered = false;
+      renderQuizQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+
+  function finishQuiz() {
+    const q = state.quiz;
+    if (!q) return;
+    const total = q.questions.length;
+    const pct = Math.round((q.correct / total) * 100);
+    const wrong = total - q.correct;
+
+    progress.quizzes.push({
+      courseId: q.courseId,
+      topicId: q.topicId,
+      correct: q.correct,
+      total: total,
+      date: new Date().toISOString()
+    });
+    if (pct >= 60) progress.completed[q.topicId] = true;
+    progress.startedCourses[q.courseId] = true;
+    progress.lastTopicId = q.topicId;
+    saveProgress();
+
+    const course = getCourse(q.courseId);
+    const topic = getTopic(q.courseId, q.topicId);
+    let verdict = 'Keep going — review the lesson and try again.';
+    if (pct >= 80) verdict = 'Excellent work. You have a strong grasp of this topic.';
+    else if (pct >= 60) verdict = 'Good effort. Review the explanations and you will master it.';
+
+    const quiz = $('#practice-quiz');
+    if (!quiz) return;
+    quiz.innerHTML =
+      '<div class="result-card">' +
+        '<div class="result-ring" style="--deg:' + (pct * 3.6) + 'deg">' +
+          '<span class="result-ring__value">' + pct + '%</span>' +
+        '</div>' +
+        '<h2 class="result-title">' + (pct >= 60 ? 'Quiz complete' : 'Quiz complete') + '</h2>' +
+        '<p class="result-sub">' + esc(course.code) + ' · ' + esc(topic.title) + '</p>' +
+        '<p class="result-sub">' + esc(verdict) + '</p>' +
+        '<div class="result-stats">' +
+          '<div class="result-stat result-stat--ok"><div class="result-stat__value">' + q.correct + '</div><div class="result-stat__label">Correct</div></div>' +
+          '<div class="result-stat result-stat--bad"><div class="result-stat__value">' + wrong + '</div><div class="result-stat__label">Incorrect</div></div>' +
+          '<div class="result-stat"><div class="result-stat__value">' + total + '</div><div class="result-stat__label">Total</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="quiz-actions">' +
+        '<button class="btn btn--primary" data-action="retry-quiz" data-course="' + q.courseId + '" data-topic="' + q.topicId + '">Try Again</button>' +
+        '<button class="btn btn--soft" data-action="return-to-learning" data-course="' + q.courseId + '" data-topic="' + q.topicId + '">Return to Learning</button>' +
+      '</div>';
+    refreshIcons();
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: PROFILE + SETTINGS
+     ========================================================== */
+  function updateProfileDisplay() {
+    const initial = initialsOf(progress.name);
+    const headerAvatar = $('#header-avatar');
+    if (headerAvatar) headerAvatar.textContent = initial;
+    const greeting = $('#greeting');
+    if (greeting) greeting.textContent = 'Hello, ' + (progress.name || 'Student') + ' 👋';
+    const pAvatar = $('#profile-avatar');
+    if (pAvatar) pAvatar.textContent = initial;
+    const pName = $('#profile-name');
+    if (pName) pName.textContent = progress.name || 'Student';
+    const pEmail = $('#profile-email');
+    if (pEmail) pEmail.textContent = progress.email || 'student@nexalearn.app';
+  }
+
+  function renderProfile() {
+    const c = $('#stat-courses'); if (c) c.textContent = Object.keys(progress.startedCourses).length;
+    const l = $('#stat-lessons'); if (l) l.textContent = Object.keys(progress.completed).length;
+    const q = $('#stat-quizzes'); if (q) q.textContent = progress.quizzes.length;
+
+    const themeSwitch = $('#switch-theme');
+    if (themeSwitch) {
+      themeSwitch.classList.toggle('is-on', progress.theme === 'dark');
+      themeSwitch.setAttribute('aria-checked', String(progress.theme === 'dark'));
+    }
+    const notifSwitch = $('#switch-notifications');
+    if (notifSwitch) {
+      notifSwitch.classList.remove('is-on');
+      notifSwitch.setAttribute('aria-checked', 'false');
+    }
+    updateProfileDisplay();
+    refreshIcons();
+  }
+
+  function renderSettings() {
+    updateSettingsAIStatus(state.aiMode);
+    refreshIcons();
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    progress.theme = theme;
+    saveProgress();
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#090812' : '#F5F3FD');
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: DATA EXPORT / IMPORT / RESET
+     ========================================================== */
+  function exportData() {
+    try {
+      const blob = new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nexalearn-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Backup downloaded', 'success');
+    } catch (e) {
+      showToast('Could not export backup', 'error');
+    }
+  }
+
+  function importData(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (!parsed || typeof parsed !== 'object') throw new Error('invalid');
+        progress = Object.assign({}, defaultProgress, parsed, {
+          completed: parsed.completed || {},
+          startedCourses: parsed.startedCourses || {},
+          quizzes: Array.isArray(parsed.quizzes) ? parsed.quizzes : []
+        });
+        saveProgress();
+        applyTheme(progress.theme || 'dark');
+        renderHome();
+        renderProfile();
+        showToast('Backup imported', 'success');
+      } catch (err) {
+        showToast('Invalid backup file', 'error');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function resetData() {
+    if (!window.confirm('Reset all progress? This will delete your completed lessons, quiz history and profile.')) return;
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    progress = Object.assign({}, defaultProgress);
+    saveProgress();
+    applyTheme('dark');
+    renderHome();
+    renderProfile();
+    showToast('Progress reset', 'success');
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: MODALS
+     ========================================================== */
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    refreshIcons();
+  }
+  function closeAllModals() {
+    $$('.modal').forEach(m => {
+      m.classList.remove('is-open');
+      m.setAttribute('aria-hidden', 'true');
+    });
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: ACTION HANDLER
+     ========================================================== */
+  async function handleAction(action, el) {
+    switch (action) {
+      case 'get-started':
+        state.stack = [];
+        navigate('home', { push: false });
+        break;
+
+      case 'explore':
+        state.stack = [];
+        navigate('learn', { push: false });
+        break;
+
+      case 'back':
+        goBack();
+        break;
+
+      case 'continue-learning':
+        openLesson(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'start-learning': {
+        const entry = progress.lastTopicId ? findTopicById(progress.lastTopicId) : null;
+        if (entry) openClassroom(entry.course.id, entry.topic.id);
+        else openClassroom(DEFAULT_COURSE_ID, DEFAULT_TOPIC_ID);
+        break;
+      }
+
+      case 'ask-tutor':
+        openClassroom(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'take-quiz':
+        startQuiz(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'complete-lesson': {
+        const topicId = el.dataset.topic;
+        progress.completed[topicId] = true;
+        progress.startedCourses[el.dataset.course] = true;
+        progress.lastTopicId = topicId;
+        saveProgress();
+        renderLesson(getCourse(el.dataset.course), getTopic(el.dataset.course, topicId));
+        showToast('Lesson marked as complete', 'success');
+        break;
+      }
+
+      case 'explain-simpler':
+        sendUserMessage('Explain this topic simply.');
+        break;
+
+      case 'give-example':
+        sendUserMessage('Give me an example.');
+        break;
+
+      case 'quiz-me':
+        sendUserMessage('Quiz me.');
+        break;
+
+      case 'start-practice':
+        startQuiz(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'pick-option':
+        pickOption(Number(el.dataset.index));
+        break;
+
+      case 'submit-answer':
+        submitAnswer();
+        break;
+
+      case 'next-question':
+        nextQuestion();
+        break;
+
+      case 'retry-quiz':
+        startQuiz(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'return-to-learning':
+        openLesson(el.dataset.course, el.dataset.topic);
+        break;
+
+      case 'exit-quiz':
+        showPracticePicker();
+        renderPracticePicker();
+        break;
+
+      case 'toggle-theme': {
+        const next = progress.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        renderProfile();
+        showToast(next === 'dark' ? 'Dark mode on' : 'Light mode on');
+        break;
+      }
+
+      case 'toggle-notifications':
+        showToast('Notifications are not available yet — coming soon.');
+        break;
+
+      case 'open-settings':
+        navigate('settings');
+        break;
+
+      case 'open-about':
+        openModal('modal');
+        break;
+
+      case 'edit-profile': {
+        const nameInput = $('#edit-name');
+        const emailInput = $('#edit-email');
+        if (nameInput) nameInput.value = progress.name || '';
+        if (emailInput) emailInput.value = progress.email || '';
+        openModal('modal-edit-profile');
+        break;
+      }
+
+      case 'close-modal':
+        closeAllModals();
+        break;
+
+      case 'test-ai': {
+        const original = el.textContent;
+        el.textContent = 'Testing…';
+        el.disabled = true;
+        try {
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: [{ role: 'user', content: 'Say "ok" and nothing else.' }],
+              context: {}
+            })
+          });
+          if (res.ok) {
+            setAIStatus('live');
+            showToast('AI is online', 'success');
+          } else {
+            setAIStatus('simulated');
+            showToast('AI is offline — using simulated tutor', 'error');
+          }
+        } catch {
+          setAIStatus('simulated');
+          showToast('AI is offline — using simulated tutor', 'error');
+        } finally {
+          el.textContent = original;
+          el.disabled = false;
+        }
+        break;
+      }
+
+      case 'export-data':
+        exportData();
+        break;
+
+      case 'import-data': {
+        const fileInput = $('#import-file');
+        if (fileInput) fileInput.click();
+        break;
+      }
+
+      case 'reset-data':
+        resetData();
+        break;
+
+      case 'install-app':
+        // Handled by the PWA bootstrap script
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: EVENT WIRING
+     ========================================================== */
+  function bindEvents() {
+    document.addEventListener('click', function (e) {
+      const target = e.target;
+
+      const navEl = target.closest('[data-nav]');
+      if (navEl) { handleNav(navEl.dataset.nav); return; }
+
+      const courseEl = target.closest('[data-course]:not([data-action])');
+      if (courseEl && courseEl.dataset.course && !courseEl.dataset.topic) {
+        openCourse(courseEl.dataset.course);
+        return;
+      }
+
+      const topicEl = target.closest('[data-topic]:not([data-action])');
+      if (topicEl) {
+        openLesson(topicEl.dataset.course, topicEl.dataset.topic);
+        return;
+      }
+
+      const promptEl = target.closest('[data-prompt]');
+      if (promptEl) {
+        sendUserMessage(promptEl.dataset.prompt);
+        return;
+      }
+
+      const actionEl = target.closest('[data-action]');
+      if (actionEl) {
+        handleAction(actionEl.dataset.action, actionEl);
+        return;
+      }
+    });
+
+    const search = $('#course-search');
+    if (search) {
+      search.addEventListener('input', function () { renderLearn(search.value); });
+    }
+
+    const composer = $('#composer');
+    if (composer) composer.addEventListener('submit', handleComposerSubmit);
+
+    const input = $('#chat-input');
+    if (input) {
+      input.addEventListener('input', function () { autoGrow(input); });
+      input.addEventListener('focus', function () {
+        document.body.classList.add('chat-focus');
+        scrollChatToBottom();
+      });
+      input.addEventListener('blur', function () {
+        document.body.classList.remove('chat-focus');
+      });
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleComposerSubmit(e);
+        }
+      });
+    }
+
+    const editForm = $('#edit-profile-form');
+    if (editForm) {
+      editForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const nameInput = $('#edit-name');
+        const emailInput = $('#edit-email');
+        const name = (nameInput && nameInput.value.trim()) || 'Student';
+        const email = (emailInput && emailInput.value.trim()) || 'student@nexalearn.app';
+        progress.name = name;
+        progress.email = email;
+        saveProgress();
+        updateProfileDisplay();
+        closeAllModals();
+        showToast('Profile updated', 'success');
+      });
+    }
+
+    const importFile = $('#import-file');
+    if (importFile) {
+      importFile.addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (file) importData(file);
+        importFile.value = '';
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeAllModals();
+    });
+
+    window.addEventListener('resize', syncViewport);
+    window.addEventListener('orientationchange', syncViewport);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', function () {
+        syncViewport();
+        if (state.currentScreen === 'classroom') {
+          requestAnimationFrame(scrollChatToBottom);
+        }
+      });
+    }
+  }
+
+  /* ==========================================================
+     JAVASCRIPT: INITIALIZATION
+     ========================================================== */
+  function init() {
+    applyTheme(progress.theme || 'dark');
+    syncViewport();
+    bindEvents();
+    renderHome();
+    renderLearn('');
+    renderPracticePicker();
+    renderProfile();
+    setAIStatus('simulated');
+    showScreen('welcome');
+    refreshIcons();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === 'interactive' || document.readyState === 'complete') init();
+})();
+</script>
+
+<!-- ============================================================
+     JAVASCRIPT: PWA Bootstrap
+     ============================================================ -->
+<script>
+(function () {
+  'use strict';
+
+  /* ---- Service worker registration ---- */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js', { scope: '/' })
+        .then(function (reg) {
+          setInterval(function () { reg.update().catch(function () {}); }, 60000);
+        })
+        .catch(function (err) {
+          console.warn('[PWA] Service worker registration failed:', err);
+        });
+    });
+  }
+
+  /* ---- Install prompt handling ---- */
+  var deferredPrompt = null;
+  var installBtn = document.getElementById('install-btn');
+  var installSection = document.getElementById('install-section');
+  var installText = document.getElementById('install-text');
+
+  var isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.navigator.standalone === true;
+
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  function refreshInstallUI() {
+    if (!installBtn || !installSection) return;
+    if (isStandalone) { installSection.classList.add('hidden'); return; }
+    if (isIOS) {
+      installBtn.classList.add('hidden');
+      if (installText) {
+        installText.innerHTML =
+          'To install on iPhone or iPad, tap the <strong>Share</strong> button in Safari, then <strong>Add to Home Screen</strong>.';
+      }
+      return;
+    }
+    if (deferredPrompt) {
+      installBtn.disabled = false;
+      installBtn.textContent = 'Install App';
+    } else {
+      installBtn.disabled = true;
+      installBtn.textContent = 'Use browser menu to install';
+    }
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    refreshInstallUI();
+  });
+
+  window.addEventListener('appinstalled', function () {
+    deferredPrompt = null;
+    if (installSection) installSection.classList.add('hidden');
+  });
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-action="install-app"]');
+    if (!btn) return;
+    if (!deferredPrompt) {
+      alert('To install, open your browser menu and choose "Install app" or "Add to Home screen".');
+      return;
+    }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function (choice) {
+      if (choice && choice.outcome === 'accepted') {
+        if (installSection) installSection.classList.add('hidden');
+      }
+      deferredPrompt = null;
+      refreshInstallUI();
+    });
+  });
+
+  /* ---- PWA shortcuts (?action=continue / ?action=practice) ---- */
+  try {
+    var params = new URLSearchParams(location.search);
+    var action = params.get('action');
+    if (action === 'continue' || action === 'practice') {
+      setTimeout(function () {
+        var target;
+        if (action === 'continue') {
+          target = document.querySelector('[data-action="continue-learning"]') ||
+                   document.querySelector('[data-nav="home"]');
+        } else {
+          target = document.querySelector('[data-nav="practice"]');
+        }
+        if (target) target.click();
+        if (history.replaceState) history.replaceState(null, '', '/');
+      }, 500);
+    }
+  } catch (err) {
+    console.warn('[PWA] Shortcut handling failed:', err);
+  }
+
+  refreshInstallUI();
+})();
+</script>
+
+</body>
+</html>
