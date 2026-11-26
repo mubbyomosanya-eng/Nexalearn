@@ -1,0 +1,36 @@
+{
+  "name": "NexaLearn — Learn. Understand. Master.",
+  "short_name": "NexaLearn",
+  "description": "Your personal AI-powered learning companion.",
+  "start_url": "/",
+  "scope": "/",
+  "id": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait",
+  "background_color": "#090812",
+  "theme_color": "#090812",
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "dir": "ltr",
+  "icons": [
+    { "src": "/icon.svg",          "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Continue Learning",
+      "short_name": "Continue",
+      "description": "Jump back into your current lesson",
+      "url": "/?action=continue",
+      "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Practice",
+      "short_name": "Practice",
+      "description": "Take a quick quiz",
+      "url": "/?action=practice",
+      "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}
