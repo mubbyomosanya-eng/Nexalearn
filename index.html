@@ -3004,9 +3004,13 @@ function updateProfileDisplay() {
   async function handleAction(action, el) {
     switch (action) {
       case 'get-started':
-        state.stack = [];
-        navigate('home', { push: false });
-        break;
+  state.stack = [];
+  if (!progress.onboarded) {
+    navigate('onboarding', { push: false });
+  } else {
+    navigate('home', { push: false });
+  }
+  break;
 
       case 'explore':
         state.stack = [];
