@@ -2012,15 +2012,17 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   const STORAGE_KEY = 'nexalearn.progress.v2';
 
   const defaultProgress = {
-    completed: {},
-    startedCourses: {},
-    quizzes: [],
-    lastTopicId: null,
-    theme: 'dark',
-    notifications: false,
-    name: 'Student',
-    email: 'student@nexalearn.app'
-  };
+  completed: {},
+  startedCourses: {},
+  quizzes: [],
+  lastTopicId: null,
+  theme: 'dark',
+  notifications: false,
+  name: 'Student',
+  email: 'student@nexalearn.app',
+  institution: 'FUNAAB',
+  onboarded: false
+};
 
   let progress = loadProgress();
 
@@ -2870,19 +2872,27 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   /* ==========================================================
      JAVASCRIPT: PROFILE + SETTINGS
      ========================================================== */
-  function updateProfileDisplay() {
-    const initial = initialsOf(progress.name);
-    const headerAvatar = $('#header-avatar');
-    if (headerAvatar) headerAvatar.textContent = initial;
-    const greeting = $('#greeting');
-    if (greeting) greeting.textContent = 'Hello, ' + (progress.name || 'Student') + ' 👋';
-    const pAvatar = $('#profile-avatar');
-    if (pAvatar) pAvatar.textContent = initial;
-    const pName = $('#profile-name');
-    if (pName) pName.textContent = progress.name || 'Student';
-    const pEmail = $('#profile-email');
-    if (pEmail) pEmail.textContent = progress.email || 'student@nexalearn.app';
-  }
+  
+function updateProfileDisplay() {
+  const initial = initialsOf(progress.name);
+  const headerAvatar = $('#header-avatar');
+  if (headerAvatar) headerAvatar.textContent = initial;
+  
+  const greeting = $('#greeting');
+  if (greeting) greeting.textContent = 'Hello, ' + (progress.name || 'Student') + ' 👋';
+  
+  const pAvatar = $('#profile-avatar');
+  if (pAvatar) pAvatar.textContent = initial;
+  
+  const pName = $('#profile-name');
+  if (pName) pName.textContent = progress.name || 'Student';
+  
+  const pEmail = $('#profile-email');
+  if (pEmail) pEmail.textContent = progress.email || 'student@nexalearn.app';
+
+  const pInst = $('#profile-institution');
+  if (pInst) pInst.textContent = progress.institution || 'Independent Learner';
+} 
 
   function renderProfile() {
     const c = $('#stat-courses'); if (c) c.textContent = Object.keys(progress.startedCourses).length;
