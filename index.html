@@ -797,6 +797,57 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
     </div>
   </section>
 
+<!-- ============================================================
+     HTML: ONBOARDING SCREEN
+     ============================================================ -->
+<section class="screen" id="screen-onboarding">
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32">
+          <rect width="32" height="32" rx="9" fill="#7C4DFF"/>
+          <path d="M16 8.5l8.5 3.9-8.5 3.9-8.5-3.9L16 8.5z" fill="#fff"/>
+          <path d="M11.2 15.2v4.4c0 1.7 2.1 3 4.8 3s4.8-1.3 4.8-3v-4.4"
+                stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-name">NexaLearn</span>
+    </div>
+    <span class="header-spacer"></span>
+  </header>
+
+  <div class="page">
+    <h1 class="screen-heading">Welcome to NexaLearn</h1>
+    <p class="muted">Let's personalize your learning experience.</p>
+
+    <div class="settings-section" style="margin-top:24px">
+      <div class="settings-block">
+        <form id="onboarding-form" autocomplete="off">
+          <label class="form-label" for="onboard-name">What should we call you?</label>
+          <input id="onboard-name" class="form-input" type="text" placeholder="Your name" required maxlength="40" />
+
+          <label class="form-label" for="onboard-institution">Your Institution</label>
+          <select id="onboard-institution" class="form-select">
+            <option value="FUNAAB">Federal University of Agriculture, Abeokuta</option>
+            <option value="UNILAG">University of Lagos</option>
+            <option value="UI">University of Ibadan</option>
+            <option value="OAU">Obafemi Awolowo University</option>
+            <option value="Other">Other Institution</option>
+          </select>
+
+          <label class="form-label" for="onboard-email">Email (optional)</label>
+          <input id="onboard-email" class="form-input" type="email" placeholder="you@example.com" maxlength="80" />
+
+          <div class="settings-actions" style="margin-top:24px">
+            <button type="submit" class="btn btn--primary">Start Learning</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
   <!-- ============================================================
        HTML: HOME DASHBOARD
        ============================================================ -->
@@ -993,7 +1044,7 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
         <button class="profile-avatar" id="profile-avatar" data-action="edit-profile" aria-label="Edit profile">S</button>
         <h1 class="profile-name" id="profile-name">Student</h1>
         <p class="muted small" id="profile-email">student@nexalearn.app</p>
-        <span class="pill pill--soft">Learner</span>
+        <span class="pill pill--soft" id="profile-institution">FUNAAB</span>
       </div>
 
       <div class="stats">
