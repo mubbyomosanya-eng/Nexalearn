@@ -836,11 +836,18 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
           </select>
 
           <label class="form-label" for="onboard-email">Email (optional)</label>
-          <input id="onboard-email" class="form-input" type="email" placeholder="you@example.com" maxlength="80" />
+<input id="onboard-email" class="form-input" type="email" placeholder="you@example.com" maxlength="80" />
 
-          <div class="settings-actions" style="margin-top:24px">
-            <button type="submit" class="btn btn--primary">Start Learning</button>
-          </div>
+<label class="form-label" style="margin-top:20px">Select your courses</label>
+<p class="muted small" style="margin-bottom:10px">Which of these are you taking this semester?</p>
+
+<div id="onboard-course-list" style="display:flex; flex-direction:column; gap:8px;">
+  <!-- The JS will fill this in with the 6 demo courses -->
+</div>
+
+<div class="settings-actions" style="margin-top:24px">
+  <button type="submit" class="btn btn--primary">Start Learning</button>
+</div>
         </form>
       </div>
     </div>
@@ -2233,22 +2240,30 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   }
 
   function renderHomeCourses() {
-    const host = $('#home-courses');
-    if (!host) return;
-    host.innerHTML = COURSES.map(function (c) {
-      const p = courseProgress(c);
-      return '<button class="course-card" data-course="' + c.id + '">' +
-        '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
-        '<span class="course-card__body">' +
-          '<span class="course-card__code">' + esc(c.code) + '</span>' +
-          '<span class="course-card__title">' + esc(c.title) + '</span>' +
-          '<span class="course-card__code" style="color:var(--muted)">' + p.done + '/' + p.total + ' topics</span>' +
-        '</span>' +
-      '</button>';
-    }).join('');
-    refreshIcons();
+  const host = $('#home-courses');
+  if (!host) return;
+  
+  // Filter courses to only show the ones the student selected
+  const myCourses = COURSES.filter(c => progress.activeCourses && progress.activeCourses.includes(c.id));
+  
+  if (myCourses.length === 0) {
+    host.innerHTML = '<p class="muted small" style="grid-column: span 2; text-align:center; padding:20px;">No courses selected. You can add them in Settings.</p>';
+    return;
   }
 
+  host.innerHTML = myCourses.map(function (c) {
+    const p = courseProgress(c);
+    return '<button class="course-card" data-course="' + c.id + '">' +
+      '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
+      '<span class="course-card__body">' +
+        '<span class="course-card__code">' + esc(c.code) + '</span>' +
+        '<span class="course-card__title">' + esc(c.title) + '</span>' +
+        '<span class="course-card__code" style="color:var(--muted)">' + p.done + '/' + p.total + ' topics</span>' +
+      '</span>' +
+    '</button>';
+  }).join('');
+  refreshIcons();
+}
   /* ==========================================================
      JAVASCRIPT: LEARN
      ========================================================== */
@@ -3242,15 +3257,35 @@ function updateProfileDisplay() {
 
 const onboardForm = $('#onboarding-form');
 if (onboardForm) {
+  // 1. Populate the course checkboxes dynamically
+  const courseList = $('#onboard-course-list');
+  if (courseList) {
+    courseList.innerHTML = COURSES.map(c => 
+      '<label style="display:flex; align-items:center; gap:10px; padding:10px; background:var(--bg2); border:1px solid var(--border); border-radius:10px; cursor:pointer;">' +
+        '<input type="checkbox" name="selected_courses" value="' + c.id + '" checked style="width:18px; height:18px; accent-color:var(--primary);" />' +
+        '<div>' +
+          '<strong style="display:block; font-size:13px;">' + c.code + '</strong>' +
+          '<span class="muted small">' + c.title + '</span>' +
+        '</div>' +
+      '</label>'
+    ).join('');
+  }
+
+  // 2. Handle the form submission
   onboardForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const nameInput = $('#onboard-name');
     const emailInput = $('#onboard-email');
     const instInput = $('#onboard-institution');
     
+    // Get checked courses
+    const checkedBoxes = document.querySelectorAll('input[name="selected_courses"]:checked');
+    const selectedCourses = Array.from(checkedBoxes).map(cb => cb.value);
+
     progress.name = (nameInput && nameInput.value.trim()) || 'Student';
     progress.email = (emailInput && emailInput.value.trim()) || 'student@nexalearn.app';
     progress.institution = (instInput && instInput.value) || 'FUNAAB';
+    progress.activeCourses = selectedCourses; // Save the courses!
     progress.onboarded = true;
     
     saveProgress();
@@ -3260,7 +3295,6 @@ if (onboardForm) {
     showToast('Welcome to NexaLearn, ' + progress.name + '!', 'success');
   });
 }
-
     const editForm = $('#edit-profile-form');
     if (editForm) {
       editForm.addEventListener('submit', function (e) {
