@@ -2245,27 +2245,43 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   }
 
   function renderContinueCard() {
-    const host = $('#continue-card');
-    if (!host) return;
-    let entry = progress.lastTopicId ? findTopicById(progress.lastTopicId) : null;
-    if (!entry) entry = { course: getCourse(DEFAULT_COURSE_ID), topic: getTopic(DEFAULT_COURSE_ID, DEFAULT_TOPIC_ID) };
-    const course = entry.course, topic = entry.topic;
-    if (!course || !topic) { host.innerHTML = ''; return; }
-    const p = courseProgress(course);
+  const host = $('#continue-card');
+  if (!host) return;
 
-    host.innerHTML =
-      '<div class="continue">' +
-        '<span class="continue__label">Continue Learning</span>' +
-        '<div class="continue__code">' + esc(course.code) + '</div>' +
-        '<div class="continue__title">' + esc(course.title) + '</div>' +
-        '<div class="continue__topic">' + esc(topic.title) + ' · Continue where you left off.</div>' +
-        '<div class="continue__bar">' +
-          '<div class="bar"><div class="bar__fill" style="width:' + p.pct + '%"></div></div>' +
-          '<div class="continue__meta"><span>' + p.done + ' of ' + p.total + ' topics</span><span>' + p.pct + '%</span></div>' +
-        '</div>' +
-        '<button class="btn btn--primary" data-action="continue-learning" data-course="' + course.id + '" data-topic="' + topic.id + '">Continue Learning</button>' +
-      '</div>';
+  // Get the active courses
+  const activeCourses = COURSES.filter(c => progress.activeCourses && progress.activeCourses.includes(c.id));
+  
+  // If they have no courses selected, hide the card
+  if (activeCourses.length === 0) {
+    host.innerHTML = '';
+    return;
   }
+
+  let entry = progress.lastTopicId ? findTopicById(progress.lastTopicId) : null;
+  
+  // If the last topic belongs to a course they just removed, or there is no last topic, pick the first active course
+  if (!entry || !activeCourses.some(c => c.id === entry.course.id)) {
+    const firstCourse = activeCourses[0];
+    entry = { course: firstCourse, topic: firstCourse.topics[0] };
+  }
+
+  const course = entry.course;
+  const topic = entry.topic;
+  const p = courseProgress(course);
+
+  host.innerHTML =
+    '<div class="continue">' +
+      '<span class="continue__label">Continue Learning</span>' +
+      '<div class="continue__code">' + esc(course.code) + '</div>' +
+      '<div class="continue__title">' + esc(course.title) + '</div>' +
+      '<div class="continue__topic">' + esc(topic.title) + ' · Continue where you left off.</div>' +
+      '<div class="continue__bar">' +
+        '<div class="bar"><div class="bar__fill" style="width:' + p.pct + '%"></div></div>' +
+        '<div class="continue__meta"><span>' + p.done + ' of ' + p.total + ' topics</span><span>' + p.pct + '%</span></div>' +
+      '</div>' +
+      '<button class="btn btn--primary" data-action="continue-learning" data-course="' + course.id + '" data-topic="' + topic.id + '">Continue Learning</button>' +
+    '</div>';
+}
 
   function renderHomeCourses() {
   const host = $('#home-courses');
