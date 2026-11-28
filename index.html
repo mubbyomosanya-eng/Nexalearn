@@ -2654,7 +2654,7 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
         .slice(-10)
         .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
 
-      const res = await fetch('/api/chat', {
+      const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -3227,7 +3227,7 @@ case 'manage-courses':
         el.textContent = 'Testing…';
         el.disabled = true;
         try {
-          const res = await fetch('/api/chat', {
+          const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
