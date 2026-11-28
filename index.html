@@ -1098,6 +1098,15 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
           <span class="chev"><i data-lucide="chevron-right"></i></span>
         </button>
 
+<button class="setting-row" data-action="manage-courses">
+  <span class="setting-row__icon"><i data-lucide="book-open"></i></span>
+  <div class="setting-row__text">
+    <span>My Courses</span>
+    <span class="muted small">Select or remove subjects</span>
+  </div>
+  <span class="chev"><i data-lucide="chevron-right"></i></span>
+</button>
+
         <button class="setting-row" data-action="open-about">
           <span class="setting-row__icon"><i data-lucide="info"></i></span>
           <div class="setting-row__text">
@@ -1252,6 +1261,25 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
           <button type="submit" class="btn btn--primary">Save</button>
         </div>
       </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-manage-courses" aria-hidden="true">
+  <div class="modal__backdrop" data-action="close-modal"></div>
+  <div class="modal__sheet" role="dialog" aria-modal="true" aria-label="Manage Courses">
+    <div class="modal__head">
+      <h3>My Courses</h3>
+      <button class="icon-btn icon-btn--sm" data-action="close-modal" aria-label="Close"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal__body">
+      <p class="muted small" style="margin-bottom:16px">Select the courses you are currently taking. Your dashboard will update instantly.</p>
+      <div id="manage-courses-list" style="display:flex; flex-direction:column; gap:10px;">
+        <!-- JS will fill this -->
+      </div>
+      <div class="settings-actions" style="margin-top:24px">
+        <button class="btn btn--primary" data-action="save-managed-courses">Save Changes</button>
+      </div>
     </div>
   </div>
 </div>
@@ -2268,42 +2296,59 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
      JAVASCRIPT: LEARN
      ========================================================== */
   function renderLearn(query) {
-    const q = String(query || '').trim().toLowerCase();
-    const host = $('#learn-courses');
-    const empty = $('#learn-empty');
-    if (!host) return;
+  const q = String(query || '').trim().toLowerCase();
+  const host = $('#learn-courses');
+  const empty = $('#learn-empty');
+  if (!host) return;
 
-    const matches = COURSES.filter(function (c) {
-      if (!q) return true;
-      if (c.code.toLowerCase().indexOf(q) !== -1) return true;
-      if (c.title.toLowerCase().indexOf(q) !== -1) return true;
-      if (c.subtitle.toLowerCase().indexOf(q) !== -1) return true;
-      return c.topics.some(t => t.title.toLowerCase().indexOf(q) !== -1 || t.desc.toLowerCase().indexOf(q) !== -1);
-    });
+  // Only show courses the user selected during onboarding
+  const availableCourses = COURSES.filter(c => 
+    !progress.activeCourses || progress.activeCourses.includes(c.id)
+  );
 
-    if (!matches.length) {
-      host.innerHTML = '';
-      if (empty) empty.classList.remove('hidden');
-      refreshIcons();
-      return;
+  const matches = availableCourses.filter(function (c) {
+    if (!q) return true;
+    if (c.code.toLowerCase().indexOf(q) !== -1) return true;
+    if (c.title.toLowerCase().indexOf(q) !== -1) return true;
+    if (c.subtitle.toLowerCase().indexOf(q) !== -1) return true;
+    return c.topics.some(t => t.title.toLowerCase().indexOf(q) !== -1 || t.desc.toLowerCase().indexOf(q) !== -1);
+  });
+
+  if (!matches.length) {
+    host.innerHTML = '';
+    if (empty) {
+      empty.classList.remove('hidden');
+      // If they have no courses at all, tell them to go to settings
+      if (availableCourses.length === 0) {
+        empty.innerHTML = '<i data-lucide="book-open"></i><p>No courses selected</p><span>Go to Settings to add your courses.</span>';
+      } else {
+        empty.innerHTML = '<i data-lucide="circle-help"></i><p>No matching courses found.</p><span>Try a different course code or topic name.</span>';
+      }
     }
-    if (empty) empty.classList.add('hidden');
-
-    host.innerHTML = matches.map(function (c) {
-      const p = courseProgress(c);
-      return '<button class="course-row" data-course="' + c.id + '">' +
-        '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
-        '<span class="course-row__body">' +
-          '<span class="course-row__code">' + esc(c.code) + '</span>' +
-          '<span class="course-row__title">' + esc(c.title) + '</span>' +
-          '<span class="course-row__meta">' + c.topics.length + ' topics · ' + p.done + ' completed</span>' +
-        '</span>' +
-        '<i data-lucide="chevron-right"></i>' +
-      '</button>';
-    }).join('');
     refreshIcons();
+    return;
+  }
+  
+  if (empty) {
+    empty.classList.add('hidden');
+    // Reset the empty state back to default for next time
+    empty.innerHTML = '<i data-lucide="circle-help"></i><p>No matching courses found.</p><span>Try a different course code or topic name.</span>';
   }
 
+  host.innerHTML = matches.map(function (c) {
+    const p = courseProgress(c);
+    return '<button class="course-row" data-course="' + c.id + '">' +
+      '<span class="course-icon" style="--ic:' + c.color + '"><i data-lucide="' + c.icon + '"></i></span>' +
+      '<span class="course-row__body">' +
+        '<span class="course-row__code">' + esc(c.code) + '</span>' +
+        '<span class="course-row__title">' + esc(c.title) + '</span>' +
+        '<span class="course-row__meta">' + c.topics.length + ' topics · ' + p.done + ' completed</span>' +
+      '</span>' +
+      '<i data-lucide="chevron-right"></i>' +
+    '</button>';
+  }).join('');
+  refreshIcons();
+}
   /* ==========================================================
      JAVASCRIPT: COURSE DETAIL
      ========================================================== */
@@ -3006,6 +3051,23 @@ function updateProfileDisplay() {
     modal.setAttribute('aria-hidden', 'false');
     refreshIcons();
   }
+
+function openManageCoursesModal() {
+  const list = $('#manage-courses-list');
+  if (list) {
+    list.innerHTML = COURSES.map(c => {
+      const isChecked = progress.activeCourses && progress.activeCourses.includes(c.id);
+      return '<label style="display:flex; align-items:center; gap:12px; padding:12px; background:var(--card); border:1px solid var(--border); border-radius:12px; cursor:pointer;">' +
+        '<input type="checkbox" name="manage_course" value="' + c.id + '"' + (isChecked ? ' checked' : '') + ' style="width:18px; height:18px; accent-color:var(--primary);" />' +
+        '<div style="flex:1;">' +
+          '<strong style="display:block; font-size:13.5px;">' + esc(c.code) + '</strong>' +
+          '<span class="muted small">' + esc(c.title) + '</span>' +
+        '</div>' +
+      '</label>';
+    }).join('');
+  }
+  openModal('modal-manage-courses');
+}
   function closeAllModals() {
     $$('.modal').forEach(m => {
       m.classList.remove('is-open');
@@ -3127,6 +3189,10 @@ function updateProfileDisplay() {
         openModal('modal');
         break;
 
+case 'manage-courses':
+  openManageCoursesModal();
+  break;
+
       case 'edit-profile': {
         const nameInput = $('#edit-name');
         const emailInput = $('#edit-email');
@@ -3169,6 +3235,24 @@ function updateProfileDisplay() {
         }
         break;
       }
+
+case 'save-managed-courses': {
+  const checked = document.querySelectorAll('input[name="manage_course"]:checked');
+  const selected = Array.from(checked).map(cb => cb.value);
+  
+  if (selected.length === 0) {
+    showToast('Please select at least one course', 'error');
+    break;
+  }
+
+  progress.activeCourses = selected;
+  saveProgress();
+  renderHome(); // Update home screen
+  renderLearn(''); // Update learn screen
+  closeAllModals();
+  showToast('Courses updated', 'success');
+  break;
+}
 
       case 'export-data':
         exportData();
