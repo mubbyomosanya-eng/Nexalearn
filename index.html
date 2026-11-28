@@ -1391,661 +1391,90 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   /* ==========================================================
      JAVASCRIPT: COURSE DATA
      ========================================================== */
-  const COURSES = [
-    {
-      id: 'gst111', code: 'GST 111', title: 'Use of English',
-      subtitle: 'Communication Skills in English', icon: 'book-open', color: '#7C4DFF',
-      topics: [
-        {
-          id: 'gst111-t1', title: 'Communication Skills',
-          desc: 'How meaning is created, sent and received between people.',
-          mins: 9,
-          intro: 'Communication is the process of exchanging information, ideas and feelings through a shared system of symbols. In academic and professional life, clear communication decides whether your ideas are understood or ignored.',
-          objectives: [
-            'Define communication and identify its core elements.',
-            'Distinguish between verbal and non-verbal communication.',
-            'Recognise barriers that distort messages and how to reduce them.'
-          ],
-          sections: [
-            { h: 'The communication process', p: 'Every act of communication involves a **sender**, a **message**, a **channel**, a **receiver** and **feedback**. The sender encodes an idea into words or signals, the message travels through a channel such as speech, writing or a screen, and the receiver decodes it. Feedback closes the loop and tells the sender whether the message landed correctly.' },
-            { h: 'Verbal and non-verbal channels', p: 'Verbal communication uses words — spoken or written. Non-verbal communication uses tone, posture, facial expression, eye contact, gesture and even silence. Non-verbal cues often carry more weight than words, because they reveal attitude and sincerity.' },
-            { h: 'Barriers to effective communication', p: 'Physical noise, poor vocabulary, emotional stress, cultural differences and assumptions all distort meaning. A good communicator removes barriers before sending: choose simple words, confirm understanding, and invite questions.' }
-          ],
-          concepts: [
-            { t: 'Encoding', d: 'Turning an idea into words, signs or symbols the receiver can understand.' },
-            { t: 'Feedback', d: 'The receiver’s response, which confirms or corrects the message.' },
-            { t: 'Noise', d: 'Anything that interferes with the message between sender and receiver.' }
-          ],
-          examples: [
-            'A lecturer who pauses after a complex point and asks “Does that make sense?” is collecting feedback.',
-            'A student who folds their arms and looks away sends a non-verbal message of disinterest, even while saying “I understand”.'
-          ],
-          quiz: [
-            { q: 'Which element closes the communication loop?', o: ['Encoding','Channel','Feedback','Noise'], a: 2, e: 'Feedback tells the sender whether the message was received as intended, so it completes the loop.' },
-            { q: 'Folding your arms while a lecturer speaks is an example of…', o: ['Verbal communication','Non-verbal communication','Written communication','Encoding failure'], a: 1, e: 'Body language such as arm folding is non-verbal communication.' },
-            { q: 'A noisy generator outside the classroom is best described as…', o: ['Feedback','A channel','Physical noise','Encoding'], a: 2, e: 'Physical noise is any environmental interference that distorts the message.' }
-          ]
-        },
-        {
-          id: 'gst111-t2', title: 'Grammar',
-          desc: 'Sentence structure, tense and agreement in academic English.',
-          mins: 10,
-          intro: 'Grammar is the system of rules that holds a language together. In academic writing, grammatical accuracy protects your meaning — a single wrong tense can change what you claim happened.',
-          objectives: [
-            'Identify the basic parts of a sentence.',
-            'Apply subject–verb agreement correctly.',
-            'Choose the right tense for academic statements.'
-          ],
-          sections: [
-            { h: 'Parts of a sentence', p: 'A complete sentence needs a **subject** and a **predicate**. The subject is who or what the sentence is about; the predicate contains the verb and says something about the subject. Objects, complements and modifiers add detail but cannot replace the core.' },
-            { h: 'Subject–verb agreement', p: 'A singular subject takes a singular verb, and a plural subject takes a plural verb. Watch out for phrases between the subject and verb: in “The list of students **is** long”, the subject is “list”, not “students”.' },
-            { h: 'Tense in academic writing', p: 'Use the present tense for general facts, the past tense for completed research actions, and the present perfect for findings that remain relevant. Keep one consistent tense inside a single idea.' }
-          ],
-          concepts: [
-            { t: 'Subject', d: 'The person, thing or idea that performs or receives the action.' },
-            { t: 'Agreement', d: 'Matching a verb to its subject in number and person.' },
-            { t: 'Clause', d: 'A group of words containing a subject and a verb.' }
-          ],
-          examples: [
-            'Wrong: “The results of the test shows improvement.” Right: “The results of the test show improvement.”',
-            'Wrong: “He have submitted the assignment.” Right: “He has submitted the assignment.”'
-          ],
-          quiz: [
-            { q: 'Choose the correct sentence.', o: ['The data shows a clear trend.','The data show a clear trend.','The datas shows a clear trend.','The data showing a clear trend.'], a: 0, e: '“Data” is commonly treated as a singular mass noun in modern usage.' },
-            { q: 'In “The list of students is long”, the subject is…', o: ['students','list','long','of students'], a: 1, e: 'The head of the subject phrase is “list”, which is singular.' },
-            { q: 'Which tense suits a general scientific fact?', o: ['Past tense','Future tense','Present tense','Past perfect'], a: 2, e: 'General facts and universal truths take the present tense.' }
-          ]
-        },
-        {
-          id: 'gst111-t3', title: 'Vocabulary',
-          desc: 'Building the word power needed for academic reading and writing.',
-          mins: 8,
-          intro: 'Vocabulary is the raw material of expression. A wide, precise vocabulary lets you say exactly what you mean, and it improves both your reading speed and your writing confidence.',
-          objectives: [
-            'Use context clues to guess the meaning of unfamiliar words.',
-            'Distinguish synonyms from words with related but different meanings.',
-            'Build a personal word-learning routine.'
-          ],
-          sections: [
-            { h: 'Context clues', p: 'Writers often signal meaning through the words around an unfamiliar term. Definitions, examples, contrasts and cause–effect relationships all act as clues. In “The drug is **efficacious**, that is, it produces the intended effect”, the phrase after the comma defines the word.' },
-            { h: 'Precision over decoration', p: 'Academic writing rewards precision. “Big” becomes “substantial” when describing an effect size; “said” becomes “argued” when describing a claim. Choose the word that carries the exact shade of meaning you need.' }
-          ],
-          concepts: [
-            { t: 'Synonym', d: 'A word with a similar meaning, but rarely an identical one.' },
-            { t: 'Collocation', d: 'Words that naturally occur together, such as “conduct research”.' },
-            { t: 'Register', d: 'The level of formality appropriate to a context.' }
-          ],
-          examples: [
-            '“Conduct research” is correct; “do research” is acceptable in speech but weaker in formal writing.',
-            '“Cheap” and “inexpensive” are near-synonyms, but “cheap” can imply poor quality.'
-          ],
-          quiz: [
-            { q: 'In “The patient was lethargic, that is, unusually tired”, the clue type is…', o: ['Contrast','Definition','Cause–effect','Example'], a: 1, e: 'The phrase “that is” explicitly restates the meaning, which is a definition clue.' },
-            { q: 'Which is the most academic collocation?', o: ['Do research','Make research','Conduct research','Take research'], a: 2, e: '“Conduct research” is the standard formal collocation.' },
-            { q: '“Inexpensive” differs from “cheap” mainly in…', o: ['Spelling','Register and connotation','Tense','Number'], a: 1, e: 'Both mean low cost, but “cheap” can carry a negative connotation.' }
-          ]
-        },
-        {
-          id: 'gst111-t4', title: 'Comprehension',
-          desc: 'Reading actively, finding main ideas and reading between the lines.',
-          mins: 9,
-          intro: 'Comprehension is the ability to extract meaning from a text and connect it to what you already know. It is an active skill: you predict, question, summarise and infer as you read.',
-          objectives: [
-            'Locate the main idea and supporting details in a passage.',
-            'Distinguish literal meaning from inference.',
-            'Summarise a text in your own words.'
-          ],
-          sections: [
-            { h: 'Skimming and scanning', p: '**Skimming** is a fast read for the general idea — look at headings, first sentences and conclusions. **Scanning** is a targeted search for specific information such as a date, name or figure.' },
-            { h: 'Main idea, details and inference', p: 'The main idea is the point the writer wants you to accept. Supporting details explain, prove or illustrate it. An inference is a conclusion you draw from evidence that is not stated outright.' }
-          ],
-          concepts: [
-            { t: 'Main idea', d: 'The central claim of a passage, usually found in the introduction or conclusion.' },
-            { t: 'Inference', d: 'A logical conclusion based on evidence rather than explicit statement.' },
-            { t: 'Paraphrase', d: 'Restating meaning in your own words while keeping the original sense.' }
-          ],
-          examples: [
-            'If a passage lists three failed policies and ends with “This approach needs urgent review”, the inference is that the writer opposes the policies.',
-            'A summary of a paragraph about rainfall should mention rainfall, not every example city named.'
-          ],
-          quiz: [
-            { q: 'Scanning is best used when you need to…', o: ['Understand the overall argument','Find a specific figure','Memorise the passage','Judge the writer’s style'], a: 1, e: 'Scanning is a targeted search for a specific piece of information.' },
-            { q: 'An inference is…', o: ['Directly stated in the text','A conclusion drawn from evidence','The title of the passage','A grammar rule'], a: 1, e: 'Inference means reading between the lines to reach a supported conclusion.' },
-            { q: 'A good summary should…', o: ['Copy the passage word for word','Include every example','Restate the main points briefly','Add your personal opinion'], a: 2, e: 'A summary restates the main points concisely in your own words.' }
-          ]
-        },
-        {
-          id: 'gst111-t5', title: 'Essay Writing',
-          desc: 'Planning, structuring and supporting a written argument.',
-          mins: 11,
-          intro: 'An essay is a sustained argument, not a collection of sentences. Good essays are planned before they are written, structured around a clear thesis, and supported with evidence.',
-          objectives: [
-            'Build an outline with a clear thesis statement.',
-            'Write effective introduction, body and conclusion paragraphs.',
-            'Link ideas with appropriate cohesive devices.'
-          ],
-          sections: [
-            { h: 'Structure', p: 'A standard essay has three movements. The **introduction** states the topic and the thesis. The **body** develops one idea per paragraph, each opened by a topic sentence. The **conclusion** restates the thesis in light of the evidence and offers a final thought.' },
-            { h: 'Cohesion and coherence', p: 'Cohesion is how sentences stick together; coherence is how the whole piece makes sense. Use transitions such as “however”, “therefore” and “in addition” sparingly and accurately.' },
-            { h: 'Evidence and citation', p: 'Claims need support. Use examples, statistics, definitions and quotations, and always credit the source. An uncited borrowed idea is plagiarism, even if it is paraphrased.' }
-          ],
-          concepts: [
-            { t: 'Thesis statement', d: 'A single sentence stating the central argument of the essay.' },
-            { t: 'Topic sentence', d: 'The first sentence of a paragraph, announcing its main idea.' },
-            { t: 'Cohesion', d: 'The use of linking devices to connect sentences and paragraphs smoothly.' }
-          ],
-          examples: [
-            'Weak thesis: “Technology is important.” Strong thesis: “Mobile learning improves revision outcomes because it supports spaced repetition.”',
-            'A body paragraph that begins “Furthermore” but introduces an opposing view is misusing the transition.'
-          ],
-          quiz: [
-            { q: 'A thesis statement should…', o: ['List every point you will make','State the central argument clearly','Appear only in the conclusion','Be a question'], a: 1, e: 'The thesis states the essay’s central claim, which the body then supports.' },
-            { q: 'The purpose of a topic sentence is to…', o: ['End a paragraph','Introduce the paragraph’s main idea','Quote a source','Define a term'], a: 1, e: 'A topic sentence announces the main idea of the paragraph it opens.' },
-            { q: 'Using a source’s idea without credit is called…', o: ['Paraphrasing','Summarising','Plagiarism','Referencing'], a: 2, e: 'Uncredited use of another person’s idea, even paraphrased, is plagiarism.' }
-          ]
-        },
-        {
-          id: 'gst111-t6', title: 'Oral English',
-          desc: 'Pronunciation, stress, intonation and effective public speaking.',
-          mins: 8,
-          intro: 'Oral English is about being understood, not about sounding like a broadcaster. Clear pronunciation, sensible stress and confident delivery matter more than an accent ever will.',
-          objectives: [
-            'Place stress correctly in common English words.',
-            'Use intonation to signal meaning and attitude.',
-            'Prepare and deliver a short presentation.'
-          ],
-          sections: [
-            { h: 'Stress and rhythm', p: 'English is a stress-timed language: some syllables are strong and others are reduced. In “PHOtograph”, “phoTOgraphy” and “photoGRAPHic”, the stress moves. Wrong stress can make an otherwise correct sentence hard to follow.' },
-            { h: 'Intonation', p: 'Intonation is the rise and fall of the voice. A falling tone signals certainty and completeness; a rising tone signals a question or uncertainty.' }
-          ],
-          concepts: [
-            { t: 'Stress', d: 'The emphasis placed on a particular syllable in a word.' },
-            { t: 'Intonation', d: 'The melody of speech — the rise and fall of pitch.' },
-            { t: 'Articulation', d: 'How clearly speech sounds are produced.' }
-          ],
-          examples: [
-            '“I didn’t say he stole it” changes meaning depending on which word you stress.',
-            'A rising intonation at the end of a statement can turn it into a question.'
-          ],
-          quiz: [
-            { q: 'In “photography”, the stress falls on the…', o: ['First syllable','Second syllable','Third syllable','Fourth syllable'], a: 1, e: 'Pho-TOG-ra-phy places the primary stress on the second syllable.' },
-            { q: 'A falling intonation at the end of a sentence usually signals…', o: ['Uncertainty','Certainty and completion','A question','Anger'], a: 1, e: 'A falling tone typically signals certainty and the end of an idea.' },
-            { q: 'Clear articulation mainly helps the speaker to…', o: ['Sound foreign','Be understood by listeners','Speak faster','Avoid grammar'], a: 1, e: 'Articulation is about being intelligible to your audience.' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'mth111', code: 'MTH 111', title: 'Mathematics',
-      subtitle: 'Foundations of Algebra and Number', icon: 'calculator', color: '#4DA3FF',
-      topics: [
-        {
-          id: 'mth111-t1', title: 'Number Systems',
-          desc: 'Natural, integer, rational and real numbers.',
-          mins: 8,
-          intro: 'Numbers are organised into sets, and each set extends the one before it. Understanding these sets prevents errors when you solve equations and check whether an answer is even possible.',
-          objectives: [
-            'List the main number sets and their symbols.',
-            'Classify a number correctly.',
-            'Explain why division by zero is undefined.'
-          ],
-          sections: [
-            { h: 'The number sets', p: '**Natural numbers** are the counting numbers 1, 2, 3. **Integers** add zero and negatives. **Rational numbers** can be written as a fraction of two integers. **Irrational numbers** cannot — such as the square root of 2 and pi.' },
-            { h: 'Why division by zero fails', p: 'Division asks how many times the divisor fits. Dividing by zero has no answer, because no number of zeros can ever produce a non-zero result.' }
-          ],
-          concepts: [
-            { t: 'Rational number', d: 'A number expressible as a/b where a and b are integers and b is not zero.' },
-            { t: 'Irrational number', d: 'A real number that cannot be written as a simple fraction.' },
-            { t: 'Real number', d: 'Any point on the number line — rational or irrational.' }
-          ],
-          examples: [
-            '0.75 is rational because it equals 3/4.',
-            'The square root of 9 is 3 (rational), but the square root of 2 is irrational.'
-          ],
-          quiz: [
-            { q: 'Which of these is irrational?', o: ['0.5','The square root of 16','The square root of 7','-3'], a: 2, e: 'The square root of 7 is not a perfect square, so its decimal never terminates or repeats.' },
-            { q: 'Which set includes zero and negative whole numbers?', o: ['Natural numbers','Integers','Irrational numbers','Prime numbers'], a: 1, e: 'Integers include negatives, zero and positive whole numbers.' },
-            { q: 'Division by zero is…', o: ['Equal to zero','Undefined','Infinite','Equal to one'], a: 1, e: 'No value satisfies division by zero, so the operation is undefined.' }
-          ]
-        },
-        {
-          id: 'mth111-t2', title: 'Algebraic Expressions',
-          desc: 'Simplifying, expanding and factorising expressions.',
-          mins: 9,
-          intro: 'Algebra replaces unknown numbers with letters so you can reason about patterns. Simplifying and factorising are the two core skills that make equations solvable.',
-          objectives: [
-            'Collect like terms correctly.',
-            'Expand brackets using the distributive law.',
-            'Factorise simple quadratic expressions.'
-          ],
-          sections: [
-            { h: 'Like terms and the distributive law', p: 'Only **like terms** can be combined: 3x and 5x add to 8x, but 3x and 5x squared cannot be added. The distributive law states a(b + c) equals ab + ac.' },
-            { h: 'Factorising quadratics', p: 'To factorise x squared + bx + c, find two numbers that multiply to c and add to b. For x squared + 5x + 6, those numbers are 2 and 3, giving (x + 2)(x + 3).' }
-          ],
-          concepts: [
-            { t: 'Like terms', d: 'Terms with identical variable parts.' },
-            { t: 'Distributive law', d: 'a(b + c) equals ab + ac.' },
-            { t: 'Factorisation', d: 'Rewriting an expression as a product of simpler expressions.' }
-          ],
-          examples: [
-            '2(3x + 4) = 6x + 8',
-            'x squared + 7x + 12 = (x + 3)(x + 4)'
-          ],
-          quiz: [
-            { q: 'Simplify 4x + 3y - 2x + y.', o: ['2x + 4y','6x + 4y','2x + 2y','7xy'], a: 0, e: '4x - 2x = 2x and 3y + y = 4y, giving 2x + 4y.' },
-            { q: 'Expand 3(2a - 5).', o: ['6a - 5','6a - 15','5a - 15','6a + 15'], a: 1, e: 'Multiply each term inside the bracket by 3: 6a - 15.' },
-            { q: 'Factorise x squared + 8x + 15.', o: ['(x + 3)(x + 5)','(x + 1)(x + 15)','(x + 2)(x + 7)','(x - 3)(x - 5)'], a: 0, e: '3 times 5 = 15 and 3 + 5 = 8, so the factors are (x + 3)(x + 5).' }
-          ]
-        },
-        {
-          id: 'mth111-t3', title: 'Trigonometric Ratios',
-          desc: 'Sine, cosine and tangent in right-angled triangles.',
-          mins: 10,
-          intro: 'Trigonometry connects the angles of a triangle to the lengths of its sides. It is the mathematical bridge between shape and measurement.',
-          objectives: [
-            'State the sine, cosine and tangent ratios.',
-            'Use SOH-CAH-TOA to find a missing side.',
-            'Apply the ratios to real-world heights and distances.'
-          ],
-          sections: [
-            { h: 'The three ratios', p: 'In a right-angled triangle, **sin = opposite / hypotenuse**, **cos = adjacent / hypotenuse** and **tan = opposite / adjacent**. The mnemonic SOH-CAH-TOA keeps them in order.' },
-            { h: 'Using the ratios', p: 'Label the sides relative to the angle you know. Choose the ratio containing the two quantities you are connecting, substitute the values, then solve for the unknown.' }
-          ],
-          concepts: [
-            { t: 'Hypotenuse', d: 'The longest side, opposite the right angle.' },
-            { t: 'Tangent', d: 'The ratio of the opposite side to the adjacent side.' },
-            { t: 'Angle of elevation', d: 'The angle between the horizontal and a line of sight looking upward.' }
-          ],
-          examples: [
-            'A 10 m ladder leaning at 60 degrees reaches a height of 10 times sin(60), about 8.66 m.',
-            'If the opposite side is 5 and the adjacent is 12, then tan(theta) = 5/12.'
-          ],
-          quiz: [
-            { q: 'sin(theta) equals…', o: ['adjacent / hypotenuse','opposite / hypotenuse','opposite / adjacent','hypotenuse / opposite'], a: 1, e: 'SOH: sine is opposite over hypotenuse.' },
-            { q: 'If tan(theta) = 3/4, the opposite-to-adjacent ratio is…', o: ['3 : 4','4 : 3','3 : 5','5 : 4'], a: 0, e: 'tan(theta) = opposite / adjacent, so the ratio is 3 : 4.' },
-            { q: 'The hypotenuse is always…', o: ['The shortest side','Opposite the right angle','Adjacent to the right angle','Equal to the sum of the legs'], a: 1, e: 'The hypotenuse lies opposite the right angle and is the longest side.' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'phy111', code: 'PHY 111', title: 'Physics',
-      subtitle: 'Mechanics, Motion and Energy', icon: 'atom', color: '#35D69A',
-      topics: [
-        {
-          id: 'phy111-t1', title: 'Measurement and Units',
-          desc: 'SI units, dimensions and measurement uncertainty.',
-          mins: 8,
-          intro: 'Physics begins with measurement. Every physical quantity is a number attached to a unit, and ignoring units is one of the most common sources of error in calculations.',
-          objectives: [
-            'Identify the seven SI base units.',
-            'Convert between common prefixes.',
-            'Explain why every measurement has uncertainty.'
-          ],
-          sections: [
-            { h: 'SI base units', p: 'The seven SI base units are the metre (length), kilogram (mass), second (time), ampere (current), kelvin (temperature), mole (amount of substance) and candela (luminous intensity).' },
-            { h: 'Uncertainty', p: 'No measurement is exact. Instruments have limited precision, and observers introduce error. Quoting a result as 5.0 cm instead of 5 cm honestly signals that the ruler reads to one decimal place.' }
-          ],
-          concepts: [
-            { t: 'Derived unit', d: 'A unit formed by combining base units, such as newton = kg m/s squared.' },
-            { t: 'Prefix', d: 'A multiplier such as kilo (10 cubed) or milli (10 to the minus 3).' },
-            { t: 'Uncertainty', d: 'The range within which the true value is expected to lie.' }
-          ],
-          examples: [
-            '1 km = 1000 m, and 1 mm = 0.001 m.',
-            'A force of 10 N equals 10 kg m/s squared.'
-          ],
-          quiz: [
-            { q: 'Which is an SI base unit?', o: ['Newton','Joule','Kelvin','Watt'], a: 2, e: 'The kelvin is the SI base unit of thermodynamic temperature.' },
-            { q: '1 millimetre equals…', o: ['0.1 m','0.01 m','0.001 m','1000 m'], a: 2, e: 'The prefix milli means one thousandth, so 1 mm = 0.001 m.' },
-            { q: 'The newton is a derived unit equal to…', o: ['kg m/s squared','kg m/s','kg/m squared','kg s'], a: 0, e: 'Force = mass times acceleration, so 1 N = 1 kg m/s squared.' }
-          ]
-        },
-        {
-          id: 'phy111-t2', title: 'Motion and Kinematics',
-          desc: 'Displacement, velocity, acceleration and the equations of motion.',
-          mins: 10,
-          intro: 'Kinematics describes motion without asking what causes it. The key idea is that velocity and acceleration are rates of change.',
-          objectives: [
-            'Distinguish distance from displacement.',
-            'Calculate average speed and acceleration.',
-            'Apply the equations of uniformly accelerated motion.'
-          ],
-          sections: [
-            { h: 'Scalars and vectors', p: '**Distance** is a scalar — it has size only. **Displacement** is a vector — it has size and direction. A runner who completes a 400 m lap has travelled 400 m but has zero displacement.' },
-            { h: 'The equations of motion', p: 'For uniform acceleration: v = u + at, s = ut + half a t squared, and v squared = u squared + 2as.' }
-          ],
-          concepts: [
-            { t: 'Velocity', d: 'Rate of change of displacement, with direction.' },
-            { t: 'Acceleration', d: 'Rate of change of velocity, measured in m/s squared.' },
-            { t: 'Uniform motion', d: 'Motion with constant velocity, hence zero acceleration.' }
-          ],
-          examples: [
-            'A car accelerating from rest at 2 m/s squared for 5 s reaches v = 0 + 2(5) = 10 m/s.',
-            'A body thrown upward decelerates at about 9.8 m/s squared on Earth.'
-          ],
-          quiz: [
-            { q: 'Which quantity is a vector?', o: ['Distance','Speed','Displacement','Time'], a: 2, e: 'Displacement has both magnitude and direction, so it is a vector.' },
-            { q: 'A car goes from 0 to 20 m/s in 4 s. Its acceleration is…', o: ['5 m/s squared','4 m/s squared','80 m/s squared','0.2 m/s squared'], a: 0, e: 'a = (v - u)/t = (20 - 0)/4 = 5 m/s squared.' },
-            { q: 'A runner completing one full lap has…', o: ['Zero displacement','Zero distance','Zero speed','Infinite velocity'], a: 0, e: 'Returning to the starting point makes the displacement zero.' }
-          ]
-        },
-        {
-          id: 'phy111-t3', title: 'Work, Energy and Power',
-          desc: 'Energy transfer, conservation and the meaning of power.',
-          mins: 9,
-          intro: 'Energy is the capacity to do work, and it is never created or destroyed — only transferred between forms. Power tells you how quickly that transfer happens.',
-          objectives: [
-            'Calculate work done by a force.',
-            'State the principle of conservation of energy.',
-            'Distinguish power from energy.'
-          ],
-          sections: [
-            { h: 'Work', p: 'Work is done when a force moves an object in the direction of the force: **W = F times d times cos(theta)**. If the force is perpendicular to the motion, no work is done.' },
-            { h: 'Power', p: 'Power is the rate of doing work: **P = W / t**. Two machines may lift the same load to the same height, doing identical work, but the more powerful one does it in less time.' }
-          ],
-          concepts: [
-            { t: 'Joule', d: 'The SI unit of work and energy, equal to one newton-metre.' },
-            { t: 'Kinetic energy', d: 'Energy of motion, given by half m v squared.' },
-            { t: 'Watt', d: 'The SI unit of power, equal to one joule per second.' }
-          ],
-          examples: [
-            'Lifting a 10 kg bag 2 m does W = 10 times 9.8 times 2, about 196 J.',
-            'A 100 W bulb uses 100 J of energy every second.'
-          ],
-          quiz: [
-            { q: 'Work is measured in…', o: ['Watts','Newtons','Joules','Pascals'], a: 2, e: 'Work and energy are measured in joules.' },
-            { q: 'A machine does 600 J of work in 3 s. Its power is…', o: ['200 W','1800 W','300 W','20 W'], a: 0, e: 'P = W/t = 600/3 = 200 W.' },
-            { q: 'Carrying a bag horizontally at constant speed does how much work against gravity?', o: ['Maximum','Zero','Equal to weight','Half the weight'], a: 1, e: 'The force is vertical while motion is horizontal, so cos(theta) = 0 and no work is done against gravity.' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'chm111', code: 'CHM 111', title: 'Chemistry',
-      subtitle: 'Atomic Structure, Bonding and the Mole', icon: 'flask-conical', color: '#F5B94C',
-      topics: [
-        {
-          id: 'chm111-t1', title: 'Atomic Structure',
-          desc: 'Protons, neutrons, electrons and electron configuration.',
-          mins: 9,
-          intro: 'The atom is the smallest unit of an element that keeps its chemical identity. Its structure explains almost everything else in chemistry.',
-          objectives: [
-            'Describe the three subatomic particles.',
-            'Determine atomic number and mass number.',
-            'Write electron configurations for the first 20 elements.'
-          ],
-          sections: [
-            { h: 'Subatomic particles', p: 'A **proton** has a positive charge and defines the element. A **neutron** is neutral and adds mass. An **electron** carries a negative charge and occupies shells around the nucleus.' },
-            { h: 'Electron shells', p: 'Electrons fill shells in order: 2, 8, 8, 18. The outermost shell determines chemical behaviour. Atoms with full outer shells are stable and unreactive.' }
-          ],
-          concepts: [
-            { t: 'Atomic number', d: 'The number of protons in an atom, which identifies the element.' },
-            { t: 'Mass number', d: 'Protons plus neutrons in the nucleus.' },
-            { t: 'Isotope', d: 'An atom with the same protons but a different number of neutrons.' }
-          ],
-          examples: [
-            'Carbon-12 has 6 protons and 6 neutrons; carbon-14 has 6 protons and 8 neutrons.',
-            'Sodium (atomic number 11) has the configuration 2, 8, 1.'
-          ],
-          quiz: [
-            { q: 'The atomic number equals the number of…', o: ['Neutrons','Protons','Electrons plus neutrons','Shells'], a: 1, e: 'Atomic number is the proton count, which defines the element.' },
-            { q: 'Isotopes of an element differ in…', o: ['Proton number','Electron number','Neutron number','Charge always'], a: 2, e: 'Isotopes share the same protons but differ in neutrons.' },
-            { q: 'The electron configuration of chlorine (17) is…', o: ['2, 8, 7','2, 8, 8','2, 7, 8','8, 8, 1'], a: 0, e: 'Shells fill 2 then 8 then 7, giving 2, 8, 7.' }
-          ]
-        },
-        {
-          id: 'chm111-t2', title: 'Chemical Bonding',
-          desc: 'Ionic, covalent and metallic bonds.',
-          mins: 9,
-          intro: 'Atoms bond to achieve a stable electron arrangement. The type of bond formed determines the properties of the substance.',
-          objectives: [
-            'Explain electron transfer in ionic bonding.',
-            'Describe electron sharing in covalent bonding.',
-            'Relate bond type to physical properties.'
-          ],
-          sections: [
-            { h: 'Ionic bonding', p: 'A metal transfers electrons to a non-metal, creating positive and negative ions held together by electrostatic attraction. Ionic compounds have high melting points and conduct electricity when molten or dissolved.' },
-            { h: 'Covalent bonding', p: 'Two non-metals share electron pairs. Simple molecular substances have low melting points, while giant covalent structures such as diamond are extremely hard.' }
-          ],
-          concepts: [
-            { t: 'Ion', d: 'A charged particle formed when an atom gains or loses electrons.' },
-            { t: 'Covalent bond', d: 'A bond formed by the sharing of an electron pair.' },
-            { t: 'Electrostatic attraction', d: 'The force between oppositely charged particles.' }
-          ],
-          examples: [
-            'NaCl: sodium loses one electron to chlorine, forming Na+ and Cl-.',
-            'Water forms through covalent sharing between oxygen and hydrogen.'
-          ],
-          quiz: [
-            { q: 'Ionic bonding involves…', o: ['Sharing electrons','Transfer of electrons','Sharing protons','Transfer of neutrons'], a: 1, e: 'Ionic bonds form when electrons are transferred from metal to non-metal.' },
-            { q: 'Ionic compounds conduct electricity when…', o: ['Solid','Molten or dissolved','Frozen','Always'], a: 1, e: 'Ions must be free to move, which happens when molten or in solution.' },
-            { q: 'A covalent bond forms between…', o: ['A metal and a non-metal','Two non-metals','Two metals','An ion and an electron'], a: 1, e: 'Covalent bonds typically form between non-metals sharing electron pairs.' }
-          ]
-        },
-        {
-          id: 'chm111-t3', title: 'The Mole Concept',
-          desc: 'Counting particles and calculating reacting masses.',
-          mins: 10,
-          intro: 'The mole lets chemists count atoms by weighing them. One mole contains 6.02 times 10 to the 23 particles — Avogadro’s number.',
-          objectives: [
-            'Define the mole and Avogadro’s number.',
-            'Convert between mass, moles and particles.',
-            'Use mole ratios in a balanced equation.'
-          ],
-          sections: [
-            { h: 'Mass, moles and molar mass', p: 'The number of moles is mass divided by molar mass: **n = m / M**. The molar mass of a substance in g/mol is numerically equal to its relative molecular mass.' },
-            { h: 'Mole ratios', p: 'A balanced equation gives the ratio in which substances react. In 2H2 + O2 to 2H2O, two moles of hydrogen react with one mole of oxygen.' }
-          ],
-          concepts: [
-            { t: 'Mole', d: 'The amount of substance containing 6.02 times 10 to the 23 particles.' },
-            { t: 'Molar mass', d: 'The mass of one mole of a substance, in g/mol.' },
-            { t: 'Avogadro’s number', d: '6.02 times 10 to the 23, the number of particles in one mole.' }
-          ],
-          examples: [
-            '18 g of water is 1 mole, since the molar mass of water is 18 g/mol.',
-            '4 g of helium is 1 mole, since the molar mass of helium is 4 g/mol.'
-          ],
-          quiz: [
-            { q: 'One mole contains how many particles?', o: ['6.02 times 10 to the 23','3.14 times 10 to the 23','6.02 times 10 to the 22','1.00 times 10 to the 23'], a: 0, e: 'Avogadro’s number is 6.02 times 10 to the 23 particles per mole.' },
-            { q: 'The number of moles in 36 g of water (molar mass 18) is…', o: ['1','2','0.5','18'], a: 1, e: 'n = m/M = 36/18 = 2 moles.' },
-            { q: 'In 2H2 + O2 to 2H2O, 4 moles of H2 need how many moles of O2?', o: ['1','2','4','8'], a: 1, e: 'The ratio is 2 : 1, so 4 moles of H2 require 2 moles of O2.' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'bio111', code: 'BIO 111', title: 'Biology',
-      subtitle: 'Cells, Genetics and Ecology', icon: 'leaf', color: '#9B72FF',
-      topics: [
-        {
-          id: 'bio111-t1', title: 'Cell Biology',
-          desc: 'Cell structure, organelles and transport across membranes.',
-          mins: 9,
-          intro: 'The cell is the basic unit of life. Every living thing is either a single cell or a community of cells working together.',
-          objectives: [
-            'Compare plant and animal cells.',
-            'State the function of key organelles.',
-            'Explain diffusion, osmosis and active transport.'
-          ],
-          sections: [
-            { h: 'Organelles and their jobs', p: 'The **nucleus** stores DNA and controls activity. **Mitochondria** release energy through respiration. **Ribosomes** build proteins. **Chloroplasts**, found only in plant cells, carry out photosynthesis.' },
-            { h: 'Transport across membranes', p: '**Diffusion** moves particles from high to low concentration and needs no energy. **Osmosis** is the diffusion of water across a partially permeable membrane. **Active transport** moves substances against a concentration gradient.' }
-          ],
-          concepts: [
-            { t: 'Osmosis', d: 'The movement of water across a partially permeable membrane from a dilute to a concentrated solution.' },
-            { t: 'Mitochondrion', d: 'The organelle where aerobic respiration releases energy.' },
-            { t: 'Cell wall', d: 'A rigid cellulose layer outside the plant cell membrane.' }
-          ],
-          examples: [
-            'A plant wilts when water leaves its cells by osmosis.',
-            'Root hair cells use active transport to absorb mineral ions from dilute soil solutions.'
-          ],
-          quiz: [
-            { q: 'Which structure is found in plant cells but not animal cells?', o: ['Nucleus','Chloroplast','Mitochondrion','Ribosome'], a: 1, e: 'Chloroplasts are the site of photosynthesis and occur only in plant cells.' },
-            { q: 'Osmosis specifically involves the movement of…', o: ['Salt','Water','Protein','Oxygen'], a: 1, e: 'Osmosis is the movement of water across a partially permeable membrane.' },
-            { q: 'Active transport differs from diffusion because it…', o: ['Needs no energy','Requires energy','Only moves water','Only occurs in plants'], a: 1, e: 'Active transport moves substances against a gradient and needs energy from respiration.' }
-          ]
-        },
-        {
-          id: 'bio111-t2', title: 'Genetics',
-          desc: 'DNA, genes, inheritance and variation.',
-          mins: 10,
-          intro: 'Genetics explains why offspring resemble their parents without being identical to them. The answer lies in DNA, the molecule that carries the instructions for building an organism.',
-          objectives: [
-            'Describe the relationship between DNA, genes and chromosomes.',
-            'Use a Punnett square to predict offspring ratios.',
-            'Distinguish genotype from phenotype.'
-          ],
-          sections: [
-            { h: 'From DNA to traits', p: '**DNA** is a double helix of bases A, T, C and G. A **gene** is a section of DNA coding for a protein. Genes are packaged into **chromosomes**, and humans have 23 pairs.' },
-            { h: 'Dominant and recessive alleles', p: 'A dominant allele is expressed even when only one copy is present; a recessive allele is expressed only when both copies are recessive. A cross between two heterozygotes gives a 3 : 1 phenotypic ratio.' }
-          ],
-          concepts: [
-            { t: 'Genotype', d: 'The genetic makeup of an organism, e.g. Aa.' },
-            { t: 'Phenotype', d: 'The observable characteristic produced by the genotype.' },
-            { t: 'Allele', d: 'One of the alternative forms of a gene.' }
-          ],
-          examples: [
-            'Aa crossed with Aa produces offspring in the ratio 1 AA : 2 Aa : 1 aa.',
-            'Two brown-eyed heterozygous parents can have a blue-eyed child.'
-          ],
-          quiz: [
-            { q: 'A section of DNA that codes for a protein is a…', o: ['Chromosome','Gene','Nucleotide','Allele'], a: 1, e: 'A gene is a segment of DNA coding for a protein or trait.' },
-            { q: 'The cross Aa with Aa gives a phenotypic ratio of…', o: ['1 : 1','3 : 1','9 : 3 : 3 : 1','2 : 1'], a: 1, e: 'Three dominant phenotypes to one recessive phenotype.' },
-            { q: 'An organism’s observable characteristics form its…', o: ['Genotype','Phenotype','Karyotype','Allele'], a: 1, e: 'Phenotype refers to observable traits, produced by genotype and environment.' }
-          ]
-        },
-        {
-          id: 'bio111-t3', title: 'Ecology',
-          desc: 'Ecosystems, food chains and energy flow.',
-          mins: 8,
-          intro: 'Ecology studies how organisms interact with each other and with their environment. The central idea is that energy enters an ecosystem as sunlight and flows through feeding relationships.',
-          objectives: [
-            'Define ecosystem, habitat and niche.',
-            'Construct and interpret a food chain.',
-            'Explain why energy is lost between trophic levels.'
-          ],
-          sections: [
-            { h: 'Levels of organisation', p: 'An **organism** belongs to a **population** of the same species, which lives in a **community** of different species, which together with the physical environment forms an **ecosystem**.' },
-            { h: 'Energy flow', p: 'Only about 10% of energy passes from one trophic level to the next. The rest is lost as heat through respiration, or locked in waste and uneaten parts.' }
-          ],
-          concepts: [
-            { t: 'Producer', d: 'An organism that makes its own food, usually by photosynthesis.' },
-            { t: 'Trophic level', d: 'A feeding position in a food chain.' },
-            { t: 'Decomposer', d: 'An organism that breaks down dead matter and recycles nutrients.' }
-          ],
-          examples: [
-            'Grass, grasshopper, lizard, hawk is a four-level food chain.',
-            'Removing a top predator can cause prey populations to rise sharply, unbalancing the ecosystem.'
-          ],
-          quiz: [
-            { q: 'Energy is lost between trophic levels mainly as…', o: ['Water','Heat from respiration','Sunlight','Carbon dioxide'], a: 1, e: 'Most energy is lost as heat during respiration at each level.' },
-            { q: 'An organism’s role in its ecosystem is its…', o: ['Habitat','Niche','Population','Biome'], a: 1, e: 'The niche describes the role and position of an organism in its community.' },
-            { q: 'Approximately what percentage of energy transfers to the next trophic level?', o: ['1%','10%','50%','90%'], a: 1, e: 'Roughly 10% of energy is transferred; the rest is lost.' }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'ict107', code: 'ICT 107', title: 'Intro to Information Technology',
-      subtitle: 'Computer Fundamentals, Hardware and Networks', icon: 'monitor', color: '#FF647C',
-      topics: [
-        {
-          id: 'ict107-t1', title: 'Computer Fundamentals',
-          desc: 'Input, processing, storage and output.',
-          mins: 8,
-          intro: 'A computer is an electronic device that accepts data, processes it according to instructions, stores the result and outputs information.',
-          objectives: [
-            'Describe the four stages of the information processing cycle.',
-            'Distinguish data from information.',
-            'Identify common input and output devices.'
-          ],
-          sections: [
-            { h: 'The information processing cycle', p: 'Every computer follows the same loop: **input** (data entered by keyboard, sensor or file), **processing** (the CPU executes instructions), **storage** (data held in memory or on disk) and **output** (results shown or printed).' },
-            { h: 'Data versus information', p: '**Data** is raw and unprocessed — a list of numbers. **Information** is data that has been organised and given meaning. A spreadsheet of scores is data; a class average is information.' }
-          ],
-          concepts: [
-            { t: 'CPU', d: 'The central processing unit that executes program instructions.' },
-            { t: 'RAM', d: 'Volatile working memory that loses its contents when power is off.' },
-            { t: 'Peripheral', d: 'Any device connected to the computer for input, output or storage.' }
-          ],
-          examples: [
-            'A keyboard is an input device; a monitor is an output device.',
-            'The average temperature computed from hourly readings is information.'
-          ],
-          quiz: [
-            { q: 'Which stage comes immediately after input?', o: ['Output','Processing','Storage','Transmission'], a: 1, e: 'Data is processed next, then stored and output.' },
-            { q: 'RAM is described as volatile because it…', o: ['Is very fast','Loses data when power is off','Is read-only','Stores permanently'], a: 1, e: 'Volatile memory loses its contents when power is removed.' },
-            { q: 'Processed and organised data is called…', o: ['Raw data','Information','Metadata','Code'], a: 1, e: 'Information is data that has been processed and given meaning.' }
-          ]
-        },
-        {
-          id: 'ict107-t2', title: 'Hardware and Software',
-          desc: 'System software, application software and how they interact.',
-          mins: 9,
-          intro: 'Hardware is what you can touch; software is the set of instructions that makes the hardware useful. Neither is very useful alone.',
-          objectives: [
-            'Classify components as hardware or software.',
-            'Distinguish system software from application software.',
-            'Explain the role of the operating system.'
-          ],
-          sections: [
-            { h: 'System software', p: 'System software manages the computer itself. The **operating system** — Windows, Linux, Android, macOS — schedules tasks, manages memory, controls devices and provides a platform on which other programs run.' },
-            { h: 'Application software', p: 'Application software performs tasks for the user: word processors, browsers, spreadsheets, games and learning apps. Applications depend on the operating system to access hardware.' }
-          ],
-          concepts: [
-            { t: 'Operating system', d: 'The master program that manages hardware and provides services to applications.' },
-            { t: 'Driver', d: 'Software that lets the operating system communicate with a specific device.' },
-            { t: 'Firmware', d: 'Software permanently stored on a device, such as the BIOS.' }
-          ],
-          examples: [
-            'Microsoft Word is application software; Windows is system software.',
-            'A printer driver translates a print job into instructions the printer understands.'
-          ],
-          quiz: [
-            { q: 'Which is system software?', o: ['Microsoft Word','Google Chrome','Android OS','Adobe Photoshop'], a: 2, e: 'An operating system such as Android is system software.' },
-            { q: 'The main job of an operating system is to…', o: ['Edit documents','Manage hardware and provide services','Browse the internet','Play videos'], a: 1, e: 'The OS manages hardware resources and provides a platform for applications.' },
-            { q: 'A driver allows the OS to…', o: ['Compile code','Communicate with a device','Encrypt files','Format a disk'], a: 1, e: 'Drivers translate commands for specific hardware devices.' }
-          ]
-        },
-        {
-          id: 'ict107-t3', title: 'Internet and Networks',
-          desc: 'How devices connect and how data travels.',
-          mins: 9,
-          intro: 'A network is two or more devices connected so they can share resources. The internet is the largest network of all.',
-          objectives: [
-            'Distinguish LAN from WAN.',
-            'Explain the role of IP addresses and DNS.',
-            'Identify basic online safety practices.'
-          ],
-          sections: [
-            { h: 'LAN, WAN and the internet', p: 'A **LAN** (local area network) covers a small area such as a room or campus. A **WAN** (wide area network) spans cities or countries. The internet is a global WAN that connects millions of smaller networks.' },
-            { h: 'Addressing and DNS', p: 'Every device on a network has an **IP address**. Because numbers are hard to remember, the **Domain Name System** translates names such as example.com into IP addresses.' }
-          ],
-          concepts: [
-            { t: 'Protocol', d: 'An agreed set of rules for communication between devices.' },
-            { t: 'Bandwidth', d: 'The amount of data a connection can carry per second.' },
-            { t: 'HTTPS', d: 'A secure, encrypted version of the HTTP protocol used by websites.' }
-          ],
-          examples: [
-            'A campus Wi-Fi network is a LAN; the internet it connects to is a WAN.',
-            'When you visit a site, DNS resolves its name to an IP address before your browser connects.'
-          ],
-          quiz: [
-            { q: 'A network covering one campus building is a…', o: ['WAN','LAN','PAN','VPN'], a: 1, e: 'A local area network (LAN) covers a small geographic area.' },
-            { q: 'DNS is responsible for…', o: ['Encrypting traffic','Translating domain names to IP addresses','Assigning bandwidth','Blocking malware'], a: 1, e: 'DNS resolves human-readable domain names into IP addresses.' },
-            { q: 'HTTPS differs from HTTP because it…', o: ['Is faster','Encrypts the connection','Works offline','Uses no IP addresses'], a: 1, e: 'HTTPS adds encryption, protecting data in transit.' }
-          ]
-        }
-      ]
-    }
-  ];
+  const ICONS = ['book-open', 'monitor', 'calculator', 'atom', 'leaf', 'flask-conical', 'brain', 'target', 'globe', 'zap'];
+const COLORS = ['#7C4DFF', '#4DA3FF', '#35D69A', '#F5B94C', '#9B72FF', '#FF647C', '#FF9F43'];
 
-  const DEFAULT_COURSE_ID = 'gst111';
-  const DEFAULT_TOPIC_ID = 'gst111-t1';
+const RAW_SYLLABUS = [
+  { id: 'cos101', code: 'COS 101', title: 'Intro to Computer Science', topics: ['Definition and history of computer', 'Basic Computing Concepts', 'Basic Components of Computer', 'Boolean Algebra, Fundamentals of Truth Tables and Precedence', 'Diverse and Growing Computers and Digital Applications', 'The Internet: Its Application and Impact on the World Today', 'Job Specializations for Computing Science Professionals', 'Computer Software', 'Operating System'] },
+  { id: 'bio101', code: 'BIO 101', title: 'General Biology', topics: ['Living Things, Characteristics and Reproduction', 'Cell Structure and Organisation: Functions of Cellular Organelles', 'Chromosomes and Genes', 'Elements of Ecology'] },
+  { id: 'mat101', code: 'MAT 101', title: 'Mathematics', topics: ['Set Theory and Venn Diagram', 'Number System', 'Quadratic Equation', 'Sequence and Series', 'Mathematical Induction', 'Binomial Theorem', 'Complex Number', 'Circular Measure', 'Trigonometry Function of Angle'] },
+  { id: 'phy101', code: 'PHY 101', title: 'Physics', topics: ['Space and Time; Units and Dimension', 'Vectors and Scalars; Differentiation of Vectors', 'Kinematics', "Newton's Laws of Motion", 'Relative Motion, Equations of Motion, Application of Newtonian Mechanics', 'Conservation Principles in Physics', 'System of Particles, Centre of Mass', 'Circular Motion, Moment of Inertia, Rotational Motion', 'Coordinate Systems, Polar Coordinates, Conservation of Angular Momentum', 'Gravitational Force'] },
+  { id: 'gst111', code: 'GST 111', title: 'General Studies', topics: ['Sound Patterns in the English Language', 'English Word Classes', 'Sentence Structure in English', 'Grammar and Usage', 'Logical and Critical Thinking', 'Ethical Considerations', 'Writing Activities', 'Comprehension Strategies', 'Information and Communication Technology', 'Language Skills for Effective Communication', 'Public Speaking and Listening', 'Word Formation / Vocabulary Development', 'Lexis and Morphology', 'Report Writing', 'Argumentation and Refutation Skills', 'Stress and Rhythm in English'] },
+  { id: 'abe106', code: 'ABE 106', title: 'Elementary Fluid Flow', topics: ['Hydrostatics', 'Hydrodynamics', 'Streamlines', 'Bernoulli and Continuity Equations', 'Turbulence', 'Reynolds Number', 'Viscosity', 'Laminar Flow', "Poiseuille's Equation", 'Surface Tension', 'Adhesion and Cohesion', 'Capillarity'] },
+  { id: 'anp101', code: 'ANP 101', title: 'Introductory Animal Physiology', topics: ['Characteristics of Living Things', 'Cellular Basis of Life', 'Cell Organelles', 'Cell Cycle', 'Cell Division', 'Cell Growth', 'Cell Death', 'Classification of Animal Kingdom', 'Grades of Organisation', 'Protozoa', 'Coelenterata', 'Porifera', 'Platyhelminthes', 'Nematoda', 'Annelida', 'Mollusca', 'Arthropoda', 'Echinodermata', 'Chordata', 'Homeostasis'] },
+  { id: 'bio103', code: 'BIO 103', title: 'Introductory Physiology', topics: ['Nature of Living Organisms', 'Activities of Living Things', 'Homeostasis', 'Growth and Development', 'Endocrine System', 'Respiration', 'Reproduction', 'Nutrition and Enzymes', 'Digestion', 'Excretion'] },
+  { id: 'bot105', code: 'BOT 105', title: 'Diversity of Plants', topics: ['Plant Forms (Habit)', 'Variations of Form Within and Between Habits', 'Plant Eco-Variations', 'Strategies of Diversity', 'Application of Diversity', 'Importance of Diversity'] },
+  { id: 'bot191', code: 'BOT 191', title: 'Practical Biology', topics: ['Practical Classes for BIO101 and BIO103'] },
+  { id: 'chm101', code: 'CHM 101', title: 'Intro to Physical Chemistry', topics: ['Atoms, Molecules and Structures', 'Electronic Configuration', 'Periodicity and Building Up of the Periodic Table', 'Chemical Reactions', 'Chemical Equations and Stoichiometry', 'Bonding and Intermolecular Forces', 'Kinetic Theory of Matter', 'Thermochemistry', "Simple Calculations Based on Hess's Law", 'Rate of Reaction', 'Chemical Equilibrium', 'Oxidation-Reduction Reactions', 'Applications of Equilibria, Including pH', 'Solubility of Ionic Solids', 'Electrochemistry', 'Corrosion'] },
+  { id: 'chm103', code: 'CHM 103', title: 'Organic Chemistry for Agriculture', topics: ['Hydrocarbons', 'Functional Groups', 'Nomenclature and Drawing of Structures', 'Isomerism and Stereoisomerism', 'Benzene Ring and Aromatic Compounds', 'Synthesis'] },
+  { id: 'chm191', code: 'CHM 191', title: 'Practical Chemistry I', topics: ['Acid-Base Titrations', 'Redox Titrations', 'Precipitation Titrations'] },
+  { id: 'csc101', code: 'CSC 101', title: 'Introduction to Computer', topics: ['History of Computer Science', 'Origin of Computing Machines', 'Computer Hardware', 'System Software', 'Operating Systems and Utilities', 'Application Software', 'Data Storage and Internal Representation', 'Bits and Character Representation', 'Concept of Data', 'Data Compression', 'Record File', 'Basic Models of File Processing'] },
+  { id: 'ets201', code: 'ETS 201', title: 'Entrepreneurship Studies I', topics: ['Historical Background of Entrepreneurship', 'Different Views of Entrepreneurship', 'Who Is an Entrepreneur?', 'What It Takes to Be an Entrepreneur', 'Choosing a Business Venture', 'Goal Setting', 'Psychological Theories', 'Sociological Theories', 'Anthropological Theories', 'Ecological Theories', 'Innovation Theories', 'Max Weber', 'McClelland', 'Schumpeter'] },
+  { id: 'gns101', code: 'GNS 101', title: 'Use of English', topics: ['Awareness Raising', 'Differences Between Formal and Informal English', 'Listening Skills', 'Speaking Skills', 'Word Classes', 'Correct Agreement in Grammatical Structures', 'Common Errors and Their Sources', 'Punctuation Marks', 'Reading Skills', 'Vocabulary Development', 'The Trials of Brother Jero', 'So Long a Letter'] },
+  { id: 'gns102', code: 'GNS 102', title: 'Intro to Nigerian History', topics: ['Methodology of History', 'Sources of Nigerian History', 'History of Non-Literate Societies', 'Early Nigerian Cultures (Nok, Igbo-Ukwu, Ife, Benin)', 'Pre-Colonial Societies', 'Trans-Saharan and Trans-Atlantic Slave Trade', 'Scramble for Africa', 'British Interest and Conquest in Nigeria', 'Colonial Rule and Its Impact', 'Decolonisation Process', 'Rise of Nationalism', 'Development After Independence'] },
+  { id: 'gns111', code: 'GNS 111', title: 'Intro to Social Problems', topics: ['Concepts of Sociology', 'Socialisation', 'Culture', 'Family', 'Marriage', 'Definition of Social Problems', 'Problems of Inequality', 'Prejudice', 'Discrimination', 'Ethnicism and Racism', 'Deviance', 'Substance Abuse', 'Environmental and Energy Problems', 'Population and Urbanisation', 'Health and HIV/AIDS'] },
+  { id: 'gns203', code: 'GNS 203', title: 'Use of Library', topics: ['Brief History of Libraries', 'Origin of Libraries', 'Types of Libraries', 'Types of Library Materials', 'Organisation of Literary Resources', 'Using Library Resources', 'Library Rules and Regulations', 'Study Skills', 'Copyright and Its Implications', 'Plagiarism', 'Bibliographies and Referencing'] },
+  { id: 'mce101', code: 'MCE 101', title: 'Intro to Engineering Drawing', topics: ['Lettering and Line Work', 'Angles', 'Triangles', 'Quadrilaterals', 'Inscribing a Circle', 'Inscribing Any Regular Polygon', 'Conic Sections', 'Drawing the True Shape of the Frustum', 'Development of Simple Objects', 'The Ellipse', 'Common Internal and External Tangents'] },
+  { id: 'mce102', code: 'MCE 102', title: 'Intro to Mechanical Engineering', topics: ['Definition of Mechanical Engineering', 'Branches of Mechanical Engineering', 'Design', 'Thermofluids', 'Manufacturing and Production', 'Industrial Engineering', 'Job Prospects'] },
+  { id: 'mce103', code: 'MCE 103', title: 'Elementary Mechanics', topics: ['Kinematics', 'Fundamental Laws of Mechanics', 'Statics and Dynamics', 'Work and Energy', 'Tutorials and Engineering Examples'] },
+  { id: 'mts101', code: 'MTS 101', title: 'Algebra', topics: ['Elementary Set Theory', 'Real Numbers', 'Indices', 'Logarithms', 'Surds', 'Mathematical Induction', 'Polynomials and Rational Expressions', 'Remainder and Factor Theorems', 'Partial Fractions', 'Inequalities', 'Theory of Quadratic Equations', 'Sequences and Series', 'Binomial Theorem', 'Matrices', 'Determinants', 'Complex Numbers', "De Moivre's Theorem"] },
+  { id: 'mts103', code: 'MTS 103', title: 'Vectors and Geometry', topics: ['Equations of Straight Lines', 'Equations of Lines and Planes in R³', 'Conic Sections (Circle, Parabola, Hyperbola, Ellipse)', 'Geometric Representation of Vectors', 'Addition and Scalar Multiplication of Vectors', 'Linear Independence', 'Scalar and Vector Products'] },
+  { id: 'mts104', code: 'MTS 104', title: 'Mechanics', topics: ['Vector Approach to Mechanics', 'Displacement, Speed, Velocity and Acceleration', "Newton's Laws of Motion", 'Work, Power and Energy', 'Conservation of Energy', 'Collision of Smooth Spheres', 'Simple Problems on Projectiles', 'Simple Pendulum', 'Simple Harmonic Motion', 'Equilibrium of Coplanar Forces', 'Laws of Friction', 'Moments of Inertia'] },
+  { id: 'mts105', code: 'MTS 105', title: 'Algebra and Trig for Agric', topics: ['Use of Mathematics in Agriculture', 'Elementary Set Theory', 'Operations with Real Numbers', 'Indices and Logarithms', 'Remainder and Factor Theorems', 'Partial Fractions', 'Equations and Inequalities', 'Sequences and Series', 'Binomial Theorem', 'Matrix Algebra', 'Elementary Trigonometry', 'Trigonometric Functions', 'Compound Angles'] },
+  { id: 'ntd103', code: 'NTD 103', title: 'Intro to Human Nutrition', topics: ['Roles of Dietetics Professionals', 'Patient-Dietetics Professional Relationship', 'Functional Foods', 'Culture and Dietetics', 'Definition and History of Nutrition', 'Carbohydrates', 'Fats', 'Proteins', 'Vitamins', 'Minerals', 'Water'] },
+  { id: 'pcp101', code: 'PCP 101', title: 'Intro to Plant Physiology', topics: ['Nature of Living Organisms', 'Plant Nutrition', 'Elements and Their Functions', 'Uptake of Nutrients', 'Photosynthesis', 'Nitrogen Cycle', 'Respiration', 'Plant Hormones', 'Homeostasis', 'Osmoregulation in Plants', 'Reproduction', 'Growth and Development', 'Flowering and Fruit Growth', 'Enzymes'] },
+  { id: 'pcp191', code: 'PCP 191', title: 'Basic Plant Physiology Practical', topics: ['Use and Handling of the Compound Microscope', 'Plant Cell Structure', 'Cell Division (Mitosis, Meiosis)', 'Plant Growth Analysis', 'Hormones and Growth Regulators', 'Bacteria, Fungi, Algae', 'Stomata', 'Tests for Carbohydrates, Proteins and Lipids'] },
+  { id: 'phs101', code: 'PHS 101', title: 'General Physics I', topics: ['Units and Dimensions', 'Rectilinear Motion', "Newton's Laws", 'Equilibrium of Moments', 'Friction', 'Motion in a Plane', 'Gravitation', 'Circular Motion', 'Simple Harmonic Motion', 'Work and Energy', 'Conservation of Energy', 'Elasticity', 'Young\'s Modulus', 'Hydrostatics', 'Temperature and Heat', 'Laws of Thermodynamics'] },
+  { id: 'phs102', code: 'PHS 102', title: 'General Physics II', topics: ['Electric Charges', 'Electric Fields', 'Electric Potential', "Coulomb's Law", 'Direct Current', 'Measuring Instruments', 'Chemical, Thermal and Magnetic Effects', 'Electromagnetic Waves', 'Interference', 'Diffraction', 'Polarisation', 'Radiation and the Photon', 'Atomic Theory', 'Radioactivity'] },
+  { id: 'phs105', code: 'PHS 105', title: 'Physics for Agric Sciences', topics: ['Linear Motion', 'Motion in a Circle', 'Simple Harmonic Motion', 'Gravitation', 'Statics and Hydrostatics', 'Elasticity', 'Friction', 'Viscosity', 'Surface Tension', 'Heat and Temperature', 'Gas Laws', 'Kinetic Theory of Matter', 'Heat Transfer'] },
+  { id: 'phs191', code: 'PHS 191', title: 'Physics Laboratory', topics: ['Selected Experiments on Mechanics', 'Heat and Properties of Matter', 'Basic Experimental Techniques', 'Observations and Measurements', 'Graphical Representation', 'Error Analysis'] },
+  { id: 'sts101', code: 'STS 101', title: 'Descriptive Statistics', topics: ['Basic Statistical Concepts', 'Types of Data', 'Sources of Data Collection', 'Presentation of Data (Tables, Graphs)', 'Errors and Approximations', 'Frequency Distributions', 'Measures of Location', 'Measures of Dispersion', 'Skewness and Kurtosis'] },
+  { id: 'sts102', code: 'STS 102', title: 'Introduction to Statistics', topics: ['Measures of Location and Dispersion', 'Algebra of Sets', 'Probability Set Functions', 'Sample Space and Events', 'Combinatorial Methods', 'Distribution Functions', 'Binomial Distribution', 'Normal Distribution', 'Poisson Distribution', 'Linear Regression', 'Correlation'] },
+  { id: 'sts111', code: 'STS 111', title: 'Probability I', topics: ['Generation of Statistical Events', 'Combinatorial Methods', 'Elementary Principles of Probability', 'Probability Laws', 'Random Variables', 'Bernoulli Distribution', 'Hypergeometric Distribution', 'Expectations and Moments'] },
+  { id: 'zoo111', code: 'ZOO 111', title: 'The Mammalian Body', topics: ['Anatomy and Physiology of the Mammal', 'Adaptation to the Environment', 'External Features', 'Skeletal System', 'Muscular System', 'Digestion and Absorption', 'Nutrition', 'Gas Exchange and Transport', 'Blood and Circulatory System', 'Kidney and Homeostasis', 'Nervous and Chemical Coordination', 'Reproduction in Humans'] }
+];
 
-  /* ==========================================================
+// Automatically generate the full course structure for the app
+const COURSES = RAW_SYLLABUS.map((course, i) => {
+  return {
+    id: course.id,
+    code: course.code,
+    title: course.title,
+    subtitle: '100 Level Course',
+    icon: ICONS[i % ICONS.length],
+    color: COLORS[i % COLORS.length],
+    topics: course.topics.map((topicTitle, j) => {
+      return {
+        id: course.id + '-t' + (j + 1),
+        title: topicTitle,
+        desc: 'Click to explore ' + topicTitle,
+        mins: 5,
+        intro: 'Welcome to ' + topicTitle + '. This topic is part of your ' + course.code + ' syllabus.',
+        objectives: [
+          'Understand the core concepts of ' + topicTitle,
+          'Identify key definitions and terms',
+          'Apply this knowledge to your coursework'
+        ],
+        sections: [
+          { h: 'Overview', p: 'This section covers **' + topicTitle + '**. The AI tutor will guide you through the material step by step.' },
+          { h: 'Key Concepts', p: 'We will dive into the core principles. Ask the AI tutor for examples if you need more clarity.' },
+          { h: 'Practical Applications', p: 'Understanding ' + topicTitle + ' is crucial for your exams. Let\'s explore how this applies practically.' }
+        ],
+        concepts: [
+          { t: 'Primary Definition', d: 'The foundational meaning of ' + topicTitle + '.' },
+          { t: 'Important Process', d: 'The steps involved in executing ' + topicTitle + ' correctly.' }
+        ],
+        examples: [
+          'An example of ' + topicTitle + ' in academic study.',
+          'How ' + topicTitle + ' is typically tested in exams.'
+        ],
+        quiz: [
+          { q: 'What is the main focus of ' + topicTitle + '?', o: ['To memorize facts', 'To understand the underlying concepts', 'To skip class', 'To fail the exam'], a: 1, e: 'Understanding the core concepts is always the main goal.' }
+        ]
+      };
+    })
+  };
+}); ==========================================================
      JAVASCRIPT: LOCAL STORAGE
      ========================================================== */
   const STORAGE_KEY = 'nexalearn.progress.v2';
