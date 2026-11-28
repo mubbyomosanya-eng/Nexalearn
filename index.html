@@ -3239,6 +3239,28 @@ function updateProfileDisplay() {
       });
     }
 
+
+const onboardForm = $('#onboarding-form');
+if (onboardForm) {
+  onboardForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const nameInput = $('#onboard-name');
+    const emailInput = $('#onboard-email');
+    const instInput = $('#onboard-institution');
+    
+    progress.name = (nameInput && nameInput.value.trim()) || 'Student';
+    progress.email = (emailInput && emailInput.value.trim()) || 'student@nexalearn.app';
+    progress.institution = (instInput && instInput.value) || 'FUNAAB';
+    progress.onboarded = true;
+    
+    saveProgress();
+    updateProfileDisplay();
+    state.stack = [];
+    navigate('home', { push: false });
+    showToast('Welcome to NexaLearn, ' + progress.name + '!', 'success');
+  });
+}
+
     const editForm = $('#edit-profile-form');
     if (editForm) {
       editForm.addEventListener('submit', function (e) {
