@@ -2648,37 +2648,39 @@ html[data-theme="light"] .switch{background:rgba(20,10,50,.12)}
   }
 
   async function callGroq(userText, course, topic) {
-    try {
-      const history = state.chat
-        .filter(m => m.role === 'user' || m.role === 'ai')
-        .slice(-10)
-        .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
+  try {
+    const history = state.chat
+      .filter(m => m.role === 'user' || m.role === 'ai')
+      .slice(-10)
+      .map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text }));
 
-      const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: history,
-          context: {
-            course: course.code + ' ' + course.title,
-            topic: topic.title,
-            intro: topic.intro,
-            concepts: topic.concepts.map(c => c.t + ': ' + c.d)
-          }
-        })
-      });
+    const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: history,
+        context: {
+          course: course.code + ' ' + course.title,
+          topic: topic.title,
+          intro: topic.intro,
+          concepts: topic.concepts.map(c => c.t + ': ' + c.d)
+        }
+      })
+    });
 
-      if (!res.ok) {
-        console.warn('[AI] request failed', res.status);
-        return null;
-      }
-      const data = await res.json();
-      return (data.reply || '').trim() || null;
-    } catch (err) {
-      console.warn('[AI] request error', err);
+    if (!res.ok) {
+      console.warn('[AI] request failed', res.status);
       return null;
     }
+    const data = await res.json();
+    return (data.reply || '').trim() || null;
+  } catch (err) {
+    console.warn('[AI] request error', err);
+    // I added this so you can actually SEE the error on your screen!
+    showToast('Network error. Check connection.', 'error'); 
+    return null;
   }
+}
 
   async function sendUserMessage(text) {
     const clean = String(text || '').trim();
@@ -3223,34 +3225,35 @@ case 'manage-courses':
         break;
 
       case 'test-ai': {
-        const original = el.textContent;
-        el.textContent = 'Testing…';
-        el.disabled = true;
-        try {
-          const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              messages: [{ role: 'user', content: 'Say "ok" and nothing else.' }],
-              context: {}
-            })
-          });
-          if (res.ok) {
-            setAIStatus('live');
-            showToast('AI is online', 'success');
-          } else {
-            setAIStatus('simulated');
-            showToast('AI is offline — using simulated tutor', 'error');
-          }
-        } catch {
-          setAIStatus('simulated');
-          showToast('AI is offline — using simulated tutor', 'error');
-        } finally {
-          el.textContent = original;
-          el.disabled = false;
-        }
-        break;
-      }
+  const original = el.textContent;
+  el.textContent = 'Testing…';
+  el.disabled = true;
+  try {
+    const res = await fetch('https://weathered-cloud-c9b4.mubbyomosanya.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: 'Say "ok" and nothing else.' }],
+        context: {}
+      })
+    });
+    if (res.ok) {
+      setAIStatus('live');
+      showToast('AI is online', 'success');
+    } else {
+      setAIStatus('simulated');
+      showToast('AI is offline — using simulated tutor', 'error');
+    }
+  } catch (err) {
+    console.error(err);
+    setAIStatus('simulated');
+    showToast('Network error. Check connection.', 'error');
+  } finally {
+    el.textContent = original;
+    el.disabled = false;
+  }
+  break;
+}
 
 case 'save-managed-courses': {
   const checked = document.querySelectorAll('input[name="manage_course"]:checked');
